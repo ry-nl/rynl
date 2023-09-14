@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    cursor: none;
+}
+
+body {
+    background: #eeeeee;
+    overscroll-behavior: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.cursor {
+    z-index: 999;
+    background-color: #111;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.hero-text {
+    width: fit-content;
+}
+
+.oval {
+    -moz-border-radius: 100% / 50%;
+    -webkit-border-radius: 100% / 50%;
+    border-radius: 100% / 100%;
+    width: 110vw;
+    left: 50%;
+}
+
+.work-button {
+    position: relative;
+}
+
+.work-button {
+    color: black;
+    background-color: transparent;
+
+    transition: 0.5s;
+}
+
+.work-button:hover {
+    background-color: #242424;
+
+    transition: 0.5s ease-in-out;
+}
+
+.work-button:hover h1 {
+    color: #eeeeee;
+    /* font-size: 3.1rem; */
+
+    transition: 0.7s;
+}
