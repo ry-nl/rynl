@@ -141,11 +141,9 @@ export default function Landing() {
 
     const workLinkVariants = {
         default: {
-            x: 0,
             opacity: 1,
         },
         hovered: {
-            x: -24,
             opacity: 0.5,
         },
     }
@@ -418,182 +416,200 @@ export default function Landing() {
                 </section>
                 <section
                     id="recent-work-section-container"
-                    className="relative h-fit pt-16 pb-60 bg-light z-10"
+                    className="w-full h-[140vh] pt-16 pb-60 bg-light z-10"
                     onMouseEnter={() => setCursorVariant('defaultDark')}
                     onMouseLeave={() => setCursorVariant('defaultLight')}
                 >
                     <div
                         id="content"
-                        className="h-fit w-full px-24 text-7xl font-light tracking-wide"
+                        className="w-full h-full px-24 text-7xl font-light tracking-wide"
                     >
-                        <h1 className="text-lg pl-8 tracking-normal">
-                            recent work
+                        <h1 className="text-lg pl-24 pb-8 tracking-normal text-black/50">
+                            RECENT WORK
                         </h1>
-                        <motion.div
-                            className="relative flex items-center h-40 w-full px-24 border-solid border-y border-black/30"
-                            onMouseEnter={() => {
-                                setWorkLinkHovered(0)
-                            }}
-                            onMouseLeave={() => {
-                                setWorkLinkHovered(-1)
-                            }}
-                        >
-                            <motion.h1
-                                className="flex justify-between items-center w-full h-full"
-                                variants={workLinkVariants}
-                                animate={
-                                    workLinkHovered == 0 ? 'hovered' : 'default'
-                                }
-                            >
-                                Warden
-                            </motion.h1>
+                        <div className="flex flex-col">
                             <motion.div
-                                className="flex justify-center items-center rounded-sm bg-[#d1cac5] drop-shadow-2xl z-10"
-                                variants={workModalVariants}
-                                animate={
-                                    workLinkHovered == 0 ? 'visible' : 'hidden'
-                                }
+                                className="relative flex items-center h-fit w-full px-24 py-4 border-solid border-y border-black/30"
                                 onMouseEnter={() => {
-                                    setCursorVariant('link')
+                                    setWorkLinkHovered(0)
                                 }}
                                 onMouseLeave={() => {
-                                    setCursorVariant('defaultDark')
+                                    setWorkLinkHovered(-1)
                                 }}
                             >
-                                <Image
-                                    src={awsImage}
-                                    alt="aws image"
-                                    className="w-full px-6 object-cover"
-                                />
+                                <motion.h1
+                                    className="flex justify-between items-center w-full h-full"
+                                    variants={workLinkVariants}
+                                    animate={
+                                        workLinkHovered == 0
+                                            ? 'hovered'
+                                            : 'default'
+                                    }
+                                >
+                                    WARDEN
+                                </motion.h1>
+                                <motion.div
+                                    className="flex justify-center items-center rounded-sm bg-[#d1cac5] drop-shadow-2xl z-10"
+                                    variants={workModalVariants}
+                                    animate={
+                                        workLinkHovered == 0
+                                            ? 'visible'
+                                            : 'hidden'
+                                    }
+                                    onMouseEnter={() => {
+                                        setCursorVariant('link')
+                                    }}
+                                    onMouseLeave={() => {
+                                        setCursorVariant('defaultDark')
+                                    }}
+                                >
+                                    <Image
+                                        src={awsImage}
+                                        alt="aws image"
+                                        className="w-full px-6 object-cover"
+                                    />
+                                </motion.div>
                             </motion.div>
-                        </motion.div>
-                        <motion.div
-                            className="flex items-center h-40 px-24 border-solid border-b border-black/30"
-                            onMouseEnter={() => {
-                                setWorkLinkHovered(1)
-                            }}
-                            onMouseLeave={() => {
-                                setWorkLinkHovered(-1)
-                            }}
-                        >
-                            <motion.h1
-                                className="flex items-center w-full h-full"
-                                variants={workLinkVariants}
-                                animate={
-                                    workLinkHovered == 1 ? 'hovered' : 'default'
-                                }
-                            >
-                                Layr
-                            </motion.h1>
                             <motion.div
-                                className="flex justify-center items-center rounded-sm drop-shadow-2xl z-10"
-                                variants={workModalVariants}
-                                animate={
-                                    workLinkHovered == 1 ? 'visible' : 'hidden'
-                                }
+                                className="flex items-center h-fit px-24 py-4 border-solid border-b border-black/30"
                                 onMouseEnter={() => {
-                                    setCursorVariant('link')
+                                    setWorkLinkHovered(1)
                                 }}
                                 onMouseLeave={() => {
-                                    setCursorVariant('defaultDark')
+                                    setWorkLinkHovered(-1)
                                 }}
                             >
-                                <Image
-                                    src={CryptoWebsite}
-                                    alt="layr image"
-                                    className="h-full object-cover"
-                                />
+                                <motion.h1
+                                    className="flex items-center w-full h-full"
+                                    variants={workLinkVariants}
+                                    animate={
+                                        workLinkHovered == 1
+                                            ? 'hovered'
+                                            : 'default'
+                                    }
+                                >
+                                    LAYR
+                                </motion.h1>
+                                <motion.div
+                                    className="flex justify-center items-center rounded-sm drop-shadow-2xl z-10"
+                                    variants={workModalVariants}
+                                    animate={
+                                        workLinkHovered == 1
+                                            ? 'visible'
+                                            : 'hidden'
+                                    }
+                                    onMouseEnter={() => {
+                                        setCursorVariant('link')
+                                    }}
+                                    onMouseLeave={() => {
+                                        setCursorVariant('defaultDark')
+                                    }}
+                                >
+                                    <Image
+                                        src={CryptoWebsite}
+                                        alt="layr image"
+                                        className="h-full object-cover"
+                                    />
+                                </motion.div>
                             </motion.div>
-                        </motion.div>
-                        <motion.div
-                            className="flex items-center h-40 px-24 border-solid border-b border-black/30"
-                            onMouseEnter={() => {
-                                setWorkLinkHovered(2)
-                            }}
-                            onMouseLeave={() => {
-                                setWorkLinkHovered(-1)
-                            }}
-                        >
-                            <motion.h1
-                                className="flex items-center w-full h-full"
-                                variants={workLinkVariants}
-                                animate={
-                                    workLinkHovered == 2 ? 'hovered' : 'default'
-                                }
-                            >
-                                Bulletin
-                            </motion.h1>
                             <motion.div
-                                className="flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
-                                variants={workModalVariants}
-                                animate={
-                                    workLinkHovered == 2 ? 'visible' : 'hidden'
-                                }
+                                className="flex items-center h-fit px-24 py-4 border-solid border-b border-black/30"
                                 onMouseEnter={() => {
-                                    setCursorVariant('link')
+                                    setWorkLinkHovered(2)
                                 }}
                                 onMouseLeave={() => {
-                                    setCursorVariant('defaultDark')
+                                    setWorkLinkHovered(-1)
                                 }}
                             >
-                                <Image
-                                    src={SocialWebsite}
-                                    alt="bulletin image"
-                                    className="h-full object-cover"
-                                />
+                                <motion.h1
+                                    className="flex items-center w-full h-full"
+                                    variants={workLinkVariants}
+                                    animate={
+                                        workLinkHovered == 2
+                                            ? 'hovered'
+                                            : 'default'
+                                    }
+                                >
+                                    BULLETIN
+                                </motion.h1>
+                                <motion.div
+                                    className="flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
+                                    variants={workModalVariants}
+                                    animate={
+                                        workLinkHovered == 2
+                                            ? 'visible'
+                                            : 'hidden'
+                                    }
+                                    onMouseEnter={() => {
+                                        setCursorVariant('link')
+                                    }}
+                                    onMouseLeave={() => {
+                                        setCursorVariant('defaultDark')
+                                    }}
+                                >
+                                    <Image
+                                        src={SocialWebsite}
+                                        alt="bulletin image"
+                                        className="h-full object-cover"
+                                    />
+                                </motion.div>
                             </motion.div>
-                        </motion.div>
-                        <motion.div
-                            className="flex items-center h-40 px-24 border-solid border-b border-black/30"
-                            onMouseEnter={() => {
-                                setWorkLinkHovered(3)
-                            }}
-                            onMouseLeave={() => {
-                                setWorkLinkHovered(-1)
-                            }}
-                        >
-                            <motion.h1
-                                className="flex items-center w-full h-full"
-                                variants={workLinkVariants}
-                                animate={
-                                    workLinkHovered == 3 ? 'hovered' : 'default'
-                                }
-                            >
-                                ReCOVER
-                            </motion.h1>
                             <motion.div
-                                className="flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
-                                variants={workModalVariants}
-                                animate={
-                                    workLinkHovered == 3 ? 'visible' : 'hidden'
-                                }
+                                className="flex items-center h-fit px-24 py-4 border-solid border-b border-black/30"
                                 onMouseEnter={() => {
-                                    setCursorVariant('link')
+                                    setWorkLinkHovered(3)
                                 }}
                                 onMouseLeave={() => {
-                                    setCursorVariant('defaultDark')
+                                    setWorkLinkHovered(-1)
                                 }}
                             >
-                                <Image
-                                    src={recoverImage}
-                                    alt="recover image"
-                                    className="h-full object-cover"
-                                />
+                                <motion.h1
+                                    className="flex items-center w-full h-full"
+                                    variants={workLinkVariants}
+                                    animate={
+                                        workLinkHovered == 3
+                                            ? 'hovered'
+                                            : 'default'
+                                    }
+                                >
+                                    RECOVER
+                                </motion.h1>
+                                <motion.div
+                                    className="flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
+                                    variants={workModalVariants}
+                                    animate={
+                                        workLinkHovered == 3
+                                            ? 'visible'
+                                            : 'hidden'
+                                    }
+                                    onMouseEnter={() => {
+                                        setCursorVariant('link')
+                                    }}
+                                    onMouseLeave={() => {
+                                        setCursorVariant('defaultDark')
+                                    }}
+                                >
+                                    <Image
+                                        src={recoverImage}
+                                        alt="recover image"
+                                        className="h-full object-cover"
+                                    />
+                                </motion.div>
                             </motion.div>
-                        </motion.div>
-                        <div
-                            id="github-button-container"
-                            className="flex justify-center w-full py-16 font-thin text-2xl"
-                        >
                             <div
-                                onMouseEnter={() => {
-                                    setCursorVariant('link')
-                                }}
-                                onMouseLeave={() => {
-                                    setCursorVariant('defaultDark')
-                                }}
+                                id="github-button-container"
+                                className="flex justify-center w-full py-16 font-thin text-2xl"
                             >
-                                <SlideButton buttonText="more work" />
+                                <div
+                                    onMouseEnter={() => {
+                                        setCursorVariant('link')
+                                    }}
+                                    onMouseLeave={() => {
+                                        setCursorVariant('defaultDark')
+                                    }}
+                                >
+                                    <SlideButton buttonText="more work" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -607,7 +623,17 @@ export default function Landing() {
                     onMouseLeave={() => {
                         setCursorVariant('defaultDark')
                     }}
-                ></section>
+                >
+                    <div className="absolute left-24 bottom-16 text-white text-8xl font-light z-20">
+                        <h1 className="mb-4">Let's Make</h1>
+                        <div className="flex items-center">
+                            <div>
+                                <h1 className="mb-4 font-bold">Great</h1>
+                                <h1>Things.</h1>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </motion.div>
     )
