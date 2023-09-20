@@ -30,7 +30,21 @@ body::-webkit-scrollbar {
 
 .cursor {
     z-index: 999;
-    background-color: #111;
+    background-color: #eeeeee;
+    opacity: 60%;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.small-cursor {
+    z-index: 999;
+    background-color: #eeeeee;
+    opacity: 80%;
     height: 16px;
     width: 16px;
     border-radius: 50%;

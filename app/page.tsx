@@ -9,7 +9,7 @@ export default function Home() {
 
     return (
         <main>
-            {!doneSplash ? (
+            {/* {!doneSplash ? (
                 <motion.div
                     className="fixed flex justify-center items-center w-screen h-[120vh] overflow-hidden bg-dark"
                     initial={{ y: '-10vh' }}
@@ -22,9 +22,9 @@ export default function Home() {
                         <h1>software developer</h1>
                     </div>
                 </motion.div>
-            ) : (
-                <Landing />
-            )}
+            ) : ( */}
+            <Landing />
+            {/* )} */}
         </main>
     )
 }

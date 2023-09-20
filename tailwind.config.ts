@@ -11,7 +11,7 @@ const config: Config = {
             colors: {
                 dark: '#2A2A2A',
                 mid: '#4A4A4A',
-                light: '#EEEEEE',
+                light: '#F1F0EE',
             },
             width: {
                 '128': '32rem',
@@ -22,6 +22,10 @@ const config: Config = {
             },
             fontSize: {
                 '10xl': '10rem',
+            },
+            fontFamily: {
+                sans: ['var(--font-neue-montreal)'],
+                serif: ['var(--font-dm-serif)'],
             },
         },
     },

@@ -51,7 +51,7 @@ export default function ParallaxText({
     return (
         <div className="flex">
             <motion.div
-                className="flex flex-nowrap whitespace-nowrap pb-2 tracking-widest"
+                className="flex flex-nowrap whitespace-nowrap text-9xl tracking-wide"
                 style={{ x }}
             >
                 <span className="block mr-[30px]">{children} </span>
