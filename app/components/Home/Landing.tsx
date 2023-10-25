@@ -5,17 +5,17 @@ import {
     useScroll,
     useTransform,
     useInView,
-    easeInOut,
-    circInOut,
+    // easeInOut,
+    // circInOut,
 } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
+// import Link from 'next/link'
 
-import CodeIcon from '@mui/icons-material/Code'
+// import CodeIcon from '@mui/icons-material/Code'
 
 import ParallaxText from '../ParallaxText'
 import StickyComponent from '../StickyComponent'
-import Magnetic from '../Magnetic'
+// import Magnetic from '../Magnetic'
 import { SlideButtonLightRight, SlideButtonDarkUp } from '../Buttons'
 
 import PhotoWebsite from '@/public/photoWebsite.jpg'
@@ -25,16 +25,15 @@ import CryptoWebsite from '@/public/cryptoWebsite.jpg'
 import GalleryWebsite from '@/public/galleryWebsite.jpg'
 import SocialWebsite from '@/public/socialWebsite.jpg'
 
-import layrImage from '@/public/layr.jpg'
-import layrHomepageImage from '@/public/layrHomepage.jpg'
+// import layrImage from '@/public/layr.jpg'
+// import layrHomepageImage from '@/public/layrHomepage.jpg'
 import awsImage from '@/public/aws1.png'
 import recoverImage from '@/public/recover1.jpg'
-import selfImage from '@/public/self.jpg'
+// import selfImage from '@/public/self.jpg'
 
-import LanguageIcon from '@mui/icons-material/Language'
-import { ExpandMore, Menu, Circle } from '@mui/icons-material'
-import InfoSection from './Sections/InfoSection'
-import { Stick } from 'next/font/google'
+// import LanguageIcon from '@mui/icons-material/Language'
+import { Menu, Circle } from '@mui/icons-material'
+// import { Stick } from 'next/font/google'
 
 export default function Landing() {
     // background video effect
