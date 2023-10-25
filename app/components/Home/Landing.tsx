@@ -247,34 +247,54 @@ export default function Landing() {
                 onMouseLeave={() => setCursorVariant('defaultDark')}
             >
                 <div className="flex flex-col justify-center gap-24 w-full h-full p-24 text-4xl font-thin">
-                    <h1
-                        className="flex gap-4 items-center w-fit"
+                    <motion.a
+                        href={'/work'}
+                        className="flex gap-4 items-center w-fit cursor-none"
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('defaultLight')}
+                        whileHover={{
+                            translateX: 10,
+                            transition: { duration: 0.2 },
+                        }}
                     >
                         <Circle className="w-2 h-2" /> WORK
-                    </h1>
-                    <h1
-                        className="flex gap-4 items-center w-fit"
+                    </motion.a>
+                    <motion.a
+                        href={'/about'}
+                        className="flex gap-4 items-center w-fit cursor-none"
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('defaultLight')}
+                        whileHover={{
+                            translateX: 10,
+                            transition: { duration: 0.2 },
+                        }}
                     >
                         <Circle className="w-2 h-2" /> ABOUT
-                    </h1>
-                    <h1
-                        className="flex gap-4 items-center w-fit"
+                    </motion.a>
+                    <motion.a
+                        href={'/contact'}
+                        className="flex gap-4 items-center w-fit cursor-none"
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('defaultLight')}
+                        whileHover={{
+                            translateX: 10,
+                            transition: { duration: 0.2 },
+                        }}
                     >
                         <Circle className="w-2 h-2" /> CONTACT
-                    </h1>
-                    <h1
-                        className="flex gap-4 items-center w-fit"
+                    </motion.a>
+                    <motion.a
+                        href={'/'}
+                        className="flex gap-4 items-center w-fit cursor-none"
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('defaultLight')}
+                        whileHover={{
+                            translateX: 10,
+                            transition: { duration: 0.2 },
+                        }}
                     >
                         <Circle className="w-2 h-2" /> BACK TO TOP
-                    </h1>
+                    </motion.a>
                 </div>
             </motion.div>
             {navModalOpen && (
@@ -304,10 +324,50 @@ export default function Landing() {
                         <source src="/bg-video-720.mp4" type="video/mp4" />
                     </motion.video>
                     <nav className="sticky flex justify-between top-0 inset-x-0 h-fit py-4 px-24 text-lg font-thin tracking-widest border-b border-white/50">
-                        <h1>HOME</h1>
-                        <h1>WORK</h1>
-                        <h1>ABOUT</h1>
-                        <h1>CONTACT</h1>
+                        <motion.h1
+                            className="nav-button"
+                            onMouseEnter={() => {
+                                setCursorVariant('link')
+                            }}
+                            onMouseLeave={() => {
+                                setCursorVariant('defaultLight')
+                            }}
+                        >
+                            HOME
+                        </motion.h1>
+                        <motion.h1
+                            className="nav-button"
+                            onMouseEnter={() => {
+                                setCursorVariant('link')
+                            }}
+                            onMouseLeave={() => {
+                                setCursorVariant('defaultLight')
+                            }}
+                        >
+                            WORK
+                        </motion.h1>
+                        <motion.h1
+                            className="nav-button"
+                            onMouseEnter={() => {
+                                setCursorVariant('link')
+                            }}
+                            onMouseLeave={() => {
+                                setCursorVariant('defaultLight')
+                            }}
+                        >
+                            ABOUT
+                        </motion.h1>
+                        <motion.h1
+                            className="nav-button"
+                            onMouseEnter={() => {
+                                setCursorVariant('link')
+                            }}
+                            onMouseLeave={() => {
+                                setCursorVariant('defaultLight')
+                            }}
+                        >
+                            CONTACT
+                        </motion.h1>
                     </nav>
                     <div className="absolute bottom-0 text-white/20 tracking-tight">
                         <ParallaxText baseVelocity={1}>
@@ -454,7 +514,7 @@ export default function Landing() {
                                     WARDEN
                                 </motion.h1>
                                 <motion.div
-                                    className="flex justify-center items-center rounded-sm bg-[#d1cac5] drop-shadow-2xl z-10"
+                                    className="relative flex justify-center items-center rounded-sm bg-[#d1cac5] drop-shadow-2xl z-10"
                                     variants={workModalVariants}
                                     animate={
                                         workLinkHovered == 0
@@ -468,6 +528,18 @@ export default function Landing() {
                                         setCursorVariant('defaultDark')
                                     }}
                                 >
+                                    <motion.div
+                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
+                                        whileHover={{
+                                            opacity: 1,
+                                            backdropFilter: 'blur(1px)',
+                                            transition: { duration: 0.2 },
+                                        }}
+                                    >
+                                        <h1 className="p-2 bg-dark">
+                                            Visit Repo
+                                        </h1>
+                                    </motion.div>
                                     <Image
                                         src={awsImage}
                                         alt="aws image"
@@ -496,7 +568,7 @@ export default function Landing() {
                                     LAYR
                                 </motion.h1>
                                 <motion.div
-                                    className="flex justify-center items-center rounded-sm drop-shadow-2xl z-10"
+                                    className="relative flex justify-center items-center rounded-sm drop-shadow-2xl z-10"
                                     variants={workModalVariants}
                                     animate={
                                         workLinkHovered == 1
@@ -510,6 +582,18 @@ export default function Landing() {
                                         setCursorVariant('defaultDark')
                                     }}
                                 >
+                                    <motion.div
+                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
+                                        whileHover={{
+                                            opacity: 1,
+                                            backdropFilter: 'blur(1px)',
+                                            transition: { duration: 0.2 },
+                                        }}
+                                    >
+                                        <h1 className="p-2 bg-dark">
+                                            Visit Repo
+                                        </h1>
+                                    </motion.div>
                                     <Image
                                         src={CryptoWebsite}
                                         alt="layr image"
@@ -538,7 +622,7 @@ export default function Landing() {
                                     BULLETIN
                                 </motion.h1>
                                 <motion.div
-                                    className="flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
+                                    className="relative flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
                                     variants={workModalVariants}
                                     animate={
                                         workLinkHovered == 2
@@ -552,6 +636,18 @@ export default function Landing() {
                                         setCursorVariant('defaultDark')
                                     }}
                                 >
+                                    <motion.div
+                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
+                                        whileHover={{
+                                            opacity: 1,
+                                            backdropFilter: 'blur(1px)',
+                                            transition: { duration: 0.2 },
+                                        }}
+                                    >
+                                        <h1 className="p-2 bg-dark">
+                                            Visit Repo
+                                        </h1>
+                                    </motion.div>
                                     <Image
                                         src={SocialWebsite}
                                         alt="bulletin image"
@@ -580,7 +676,7 @@ export default function Landing() {
                                     RECOVER
                                 </motion.h1>
                                 <motion.div
-                                    className="flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
+                                    className="relative flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
                                     variants={workModalVariants}
                                     animate={
                                         workLinkHovered == 3
@@ -594,6 +690,18 @@ export default function Landing() {
                                         setCursorVariant('defaultDark')
                                     }}
                                 >
+                                    <motion.div
+                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
+                                        whileHover={{
+                                            opacity: 1,
+                                            backdropFilter: 'blur(1px)',
+                                            transition: { duration: 0.2 },
+                                        }}
+                                    >
+                                        <h1 className="p-2 bg-dark">
+                                            Visit Repo
+                                        </h1>
+                                    </motion.div>
                                     <Image
                                         src={recoverImage}
                                         alt="recover image"
@@ -732,7 +840,7 @@ export default function Landing() {
                                         }}
                                     >
                                         <SlideButtonDarkUp
-                                            buttonText="(702)XXX-XXXX"
+                                            buttonText="(702)626-3161"
                                             link="/contact"
                                             popupText="→"
                                         />
@@ -741,62 +849,11 @@ export default function Landing() {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="absolute left-24 top-1/2 -translate-y-1/2 text-white text-9xl font-light z-20">
-                        <div className="flex">
-                            <div>
-                                <h1 className="mb-4">Let's Make</h1>
-                                <div className="flex items-center">
-                                    <div>
-                                        <h1 className="mb-4 font-bold">
-                                            Great
-                                        </h1>
-                                        <h1>Things.</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
-                    {/* <div className="absolute flex flex-col gap-8 left-36 top-1/2 -translate-y-1/2 h-fit w-1/2 p-8 bg-[#DDDDDD] rounded-2xl z-20">
-                        <h1 className="text-2xl font-light">
-                            Let's get in touch!
-                        </h1>
-                        <div className="flex justify-between gap-8">
-                            <input
-                                type="text"
-                                className="w-full h-12 px-4 rounded-lg font-light"
-                                placeholder="First Name"
-                            />
-                            <input
-                                type="text"
-                                className="w-full h-12 px-4 rounded-lg font-light"
-                                placeholder="Last Name"
-                            />
-                        </div>
-                        <div className="flex justify-between gap-8">
-                            <input
-                                type="email"
-                                className="w-full h-12 px-4 rounded-lg font-light"
-                                placeholder="Email"
-                            />
-                            <input
-                                type="tel"
-                                className="w-full h-12 px-4 rounded-lg font-light"
-                                placeholder="Phone"
-                            />
-                        </div>
-                        <input
-                            type=""
-                            className="w-full h-12 px-4 rounded-lg font-light"
-                            placeholder="Subject"
-                        />
-                        <textarea
-                            className="w-full h-36 p-4 rounded-lg font-light resize-none"
-                            placeholder="Message"
-                        />
-                    </div> */}
                     <div className="absolute flex justify-between bottom-0 p-6 w-full text-white/50 tracking-wide font-thin">
                         <h1>Based in Los Angeles, CA</h1>
-                        {/* <h1>Built with Next.js, Tailwind CSS, and Framer</h1> */}
+                        <h1>
+                            Built with Next.js, Tailwind CSS, and Framer Motion
+                        </h1>
                         <h1>© 2023 Ryan Lee - All Rights Reserved</h1>
                     </div>
                 </section>

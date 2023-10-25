@@ -90,9 +90,29 @@ body::-webkit-scrollbar {
     transition: 0.7s;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+.nav-button:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.nav-button::before {
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    inset: 0 0 0 0;
+    background: #999999;
+    z-index: -1;
+    transition: transform 0.3s ease;
+}
+
+.nav-button {
+    position: relative;
+    font-size: 1.125rem;
+    padding: 0px 4px 0px 4px;
 }
