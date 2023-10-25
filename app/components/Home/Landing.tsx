@@ -15,7 +15,8 @@ import CodeIcon from '@mui/icons-material/Code'
 
 import ParallaxText from '../ParallaxText'
 import StickyComponent from '../StickyComponent'
-import { SlideButton } from '../Buttons'
+import Magnetic from '../Magnetic'
+import { SlideButtonLightRight, SlideButtonDarkUp } from '../Buttons'
 
 import PhotoWebsite from '@/public/photoWebsite.jpg'
 import TeaWebsite from '@/public/teaWebsite.jpg'
@@ -28,10 +29,12 @@ import layrImage from '@/public/layr.jpg'
 import layrHomepageImage from '@/public/layrHomepage.jpg'
 import awsImage from '@/public/aws1.png'
 import recoverImage from '@/public/recover1.jpg'
+import selfImage from '@/public/self.jpg'
 
 import LanguageIcon from '@mui/icons-material/Language'
 import { ExpandMore, Menu, Circle } from '@mui/icons-material'
 import InfoSection from './Sections/InfoSection'
+import { Stick } from 'next/font/google'
 
 export default function Landing() {
     // background video effect
@@ -295,32 +298,34 @@ export default function Landing() {
                         autoPlay
                         muted
                         loop
-                        className="absolute top-0 left-0 w-full h-[120vh] object-cover contrast-[105%] brightness-[60%] grayscale-[25%]"
+                        className="absolute top-0 left-0 w-full h-[120vh] object-cover contrast-[105%] brightness-[65%] grayscale-[25%]"
                         style={{ y: videoY }}
                     >
                         <source src="/bg-video-720.mp4" type="video/mp4" />
                     </motion.video>
-                    <nav className="sticky flex justify-between top-0 inset-x-0 h-fit py-4 px-24 text-lg font-thin border-b border-white/50">
+                    <nav className="sticky flex justify-between top-0 inset-x-0 h-fit py-4 px-24 text-lg font-thin tracking-widest border-b border-white/50">
                         <h1>HOME</h1>
                         <h1>WORK</h1>
                         <h1>ABOUT</h1>
                         <h1>CONTACT</h1>
                     </nav>
-                    <div className="absolute bottom-0 text-white/30 tracking-tight">
+                    <div className="absolute bottom-0 text-white/20 tracking-tight">
                         <ParallaxText baseVelocity={1}>
                             SOFTWARE DEVELOPER - UI/UX DESIGNER -
                         </ParallaxText>
                     </div>
                     <div className="absolute left-24 top-1/2 -translate-y-1/2 tracking-wide z-10">
-                        <div className="font-normal text-8xl">RYAN LEE</div>
-                        <div className="font-thin text-3xl pt-6 text-white/60">
+                        <div className="flex gap-6 items-center font-normal text-8xl">
+                            <h1>RYAN LEE</h1>
+                        </div>
+                        <div className="font-thin text-3xl pt-6 text-white/70">
                             SOFTWARE DEVELOPER & UI/UX DESIGNER
                         </div>
                         {/* <div className="font-thin text-5xl pt-6 text-white/60">
                         UI/UX DESIGNER
                     </div> */}
                     </div>
-                    <div className="absolute right-24 top-1/2 -translate-y-1/2 font-thin text-2xl z-10 hidden lg:block">
+                    <div className="absolute right-24 top-1/2 -translate-y-1/2 font-thin text-2xl text-white/70 z-10 hidden lg:block">
                         <div className="pb-12">Based in Los Angeles, CA</div>
                         <div>University of Southern California,</div>
                         <div>B.S. Computer Science</div>
@@ -421,7 +426,7 @@ export default function Landing() {
                     onMouseLeave={() => setCursorVariant('defaultLight')}
                 >
                     <div
-                        id="content"
+                        id="section-content"
                         className="w-full h-full px-24 text-7xl font-light tracking-wide"
                     >
                         <h1 className="text-lg pl-24 pb-8 tracking-normal text-black/50">
@@ -597,8 +602,8 @@ export default function Landing() {
                                 </motion.div>
                             </motion.div>
                             <div
-                                id="github-button-container"
-                                className="flex justify-center w-full py-16 font-thin text-2xl"
+                                id="more-work-button-container"
+                                className="flex justify-center w-full py-16 font-thin tracking-wide text-xl"
                             >
                                 <div
                                     onMouseEnter={() => {
@@ -608,7 +613,11 @@ export default function Landing() {
                                         setCursorVariant('defaultDark')
                                     }}
                                 >
-                                    <SlideButton buttonText="more work" />
+                                    <SlideButtonLightRight
+                                        buttonText="MORE WORK"
+                                        link="https://github.com/ry-nl"
+                                        popupText="→"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -616,7 +625,7 @@ export default function Landing() {
                 </section>
                 <section
                     id="info-section-container"
-                    className="relative flex justify-between h-screen px-12 bg-dark"
+                    className="relative flex justify-between h-screen bg-dark"
                     onMouseEnter={() => {
                         setCursorVariant('defaultLight')
                     }}
@@ -624,14 +633,171 @@ export default function Landing() {
                         setCursorVariant('defaultDark')
                     }}
                 >
-                    <div className="absolute left-24 bottom-16 text-white text-8xl font-light z-20">
-                        <h1 className="mb-4">Let's Make</h1>
-                        <div className="flex items-center">
-                            <div>
-                                <h1 className="mb-4 font-bold">Great</h1>
-                                <h1>Things.</h1>
+                    <div
+                        id="section-content"
+                        className="flex flex-col gap-20 justify-center w-full h-full text-white px-36"
+                    >
+                        <div className="text-white font-thin">
+                            <h1 className="pb-8 text-3xl text-white/70">
+                                Thanks for stopping by!
+                            </h1>
+                            <h1 className="text-7xl font-light">
+                                Let's Make Great Things.
+                            </h1>
+                        </div>
+                        <div className="relative flex justify-end items-center text-black font-thin text-2xl drop-shadow-2xl">
+                            <hr className="absolute w-full" />
+                            <div className="absolute -translate-y-1/4 pr-24">
+                                <StickyComponent>
+                                    <motion.div
+                                        className="flex justify-center items-center h-64 w-64 bg-light rounded-full"
+                                        whileHover={{
+                                            backgroundColor: '#2d86fa',
+                                        }}
+                                    >
+                                        download cv
+                                    </motion.div>
+                                </StickyComponent>
                             </div>
                         </div>
+                        <div className="text-white text-4xl font-light z-20">
+                            <div className="flex gap-8">
+                                <div
+                                    id="github-button-container"
+                                    className="flex justify-center font-thin tracking-wide text-xl"
+                                >
+                                    <div
+                                        onMouseEnter={() => {
+                                            setCursorVariant('link')
+                                        }}
+                                        onMouseLeave={() => {
+                                            setCursorVariant('defaultLight')
+                                        }}
+                                    >
+                                        <SlideButtonDarkUp
+                                            buttonText="Github"
+                                            link="https://github.com/ry-nl"
+                                            popupText="→"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    id="linkedin-button-container"
+                                    className="flex justify-center font-thin tracking-wide text-xl"
+                                >
+                                    <div
+                                        onMouseEnter={() => {
+                                            setCursorVariant('link')
+                                        }}
+                                        onMouseLeave={() => {
+                                            setCursorVariant('defaultLight')
+                                        }}
+                                    >
+                                        <SlideButtonDarkUp
+                                            buttonText="Linkedin"
+                                            link="https://linkedin.com/in/ry-nl"
+                                            popupText="→"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    id="email-button-container"
+                                    className="flex justify-center font-thin tracking-wide text-xl"
+                                >
+                                    <div
+                                        onMouseEnter={() => {
+                                            setCursorVariant('link')
+                                        }}
+                                        onMouseLeave={() => {
+                                            setCursorVariant('defaultLight')
+                                        }}
+                                    >
+                                        <SlideButtonDarkUp
+                                            buttonText="rynldev@gmail.com"
+                                            link="https://mail.google.com/mail/?view=cm&source=mailto&to=rynldev@gmail.com"
+                                            popupText="@"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    id="phone-button-container"
+                                    className="flex justify-center font-thin tracking-wide text-xl"
+                                >
+                                    <div
+                                        onMouseEnter={() => {
+                                            setCursorVariant('link')
+                                        }}
+                                        onMouseLeave={() => {
+                                            setCursorVariant('defaultLight')
+                                        }}
+                                    >
+                                        <SlideButtonDarkUp
+                                            buttonText="(702)XXX-XXXX"
+                                            link="/contact"
+                                            popupText="→"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className="absolute left-24 top-1/2 -translate-y-1/2 text-white text-9xl font-light z-20">
+                        <div className="flex">
+                            <div>
+                                <h1 className="mb-4">Let's Make</h1>
+                                <div className="flex items-center">
+                                    <div>
+                                        <h1 className="mb-4 font-bold">
+                                            Great
+                                        </h1>
+                                        <h1>Things.</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
+                    {/* <div className="absolute flex flex-col gap-8 left-36 top-1/2 -translate-y-1/2 h-fit w-1/2 p-8 bg-[#DDDDDD] rounded-2xl z-20">
+                        <h1 className="text-2xl font-light">
+                            Let's get in touch!
+                        </h1>
+                        <div className="flex justify-between gap-8">
+                            <input
+                                type="text"
+                                className="w-full h-12 px-4 rounded-lg font-light"
+                                placeholder="First Name"
+                            />
+                            <input
+                                type="text"
+                                className="w-full h-12 px-4 rounded-lg font-light"
+                                placeholder="Last Name"
+                            />
+                        </div>
+                        <div className="flex justify-between gap-8">
+                            <input
+                                type="email"
+                                className="w-full h-12 px-4 rounded-lg font-light"
+                                placeholder="Email"
+                            />
+                            <input
+                                type="tel"
+                                className="w-full h-12 px-4 rounded-lg font-light"
+                                placeholder="Phone"
+                            />
+                        </div>
+                        <input
+                            type=""
+                            className="w-full h-12 px-4 rounded-lg font-light"
+                            placeholder="Subject"
+                        />
+                        <textarea
+                            className="w-full h-36 p-4 rounded-lg font-light resize-none"
+                            placeholder="Message"
+                        />
+                    </div> */}
+                    <div className="absolute flex justify-between bottom-0 p-6 w-full text-white/50 tracking-wide font-thin">
+                        <h1>Based in Los Angeles, CA</h1>
+                        {/* <h1>Built with Next.js, Tailwind CSS, and Framer</h1> */}
+                        <h1>© 2023 Ryan Lee - All Rights Reserved</h1>
                     </div>
                 </section>
             </div>

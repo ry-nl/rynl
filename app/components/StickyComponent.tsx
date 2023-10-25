@@ -28,7 +28,7 @@ export default function Framer({ children }: { children: React.ReactNode }) {
             animate={{ x, y }}
             transition={{
                 type: 'spring',
-                stiffness: 100,
+                stiffness: 40,
                 damping: 15,
                 mass: 0.1,
             }}
