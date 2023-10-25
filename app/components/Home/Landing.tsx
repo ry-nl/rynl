@@ -750,7 +750,7 @@ export default function Landing() {
                                 Thanks for stopping by!
                             </h1>
                             <h1 className="text-7xl font-light">
-                                Let's Make Great Things.
+                                {`Let's Make Great Things.`}
                             </h1>
                         </div>
                         <div className="relative flex justify-end items-center text-black font-thin text-2xl drop-shadow-2xl">
