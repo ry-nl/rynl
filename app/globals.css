@@ -89,3 +89,10 @@ body::-webkit-scrollbar {
 
     transition: 0.7s;
 }
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
