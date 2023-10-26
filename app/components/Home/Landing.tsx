@@ -206,6 +206,7 @@ export default function Landing() {
             <motion.div
                 id="nav-button"
                 className="fixed flex justify-center items-center top-12 right-12 w-20 h-20 bg-white rounded-full shadow-xl z-20"
+                initial={{ opacity: 0, scale: 0 }}
                 animate={{
                     opacity: heroInView ? 0 : 1,
                     scale: heroInView ? 0 : 1,
@@ -221,6 +222,7 @@ export default function Landing() {
             </motion.div>
             <motion.div
                 className="fixed top-0 right-0 w-1/3 h-screen bg-dark text-white font-light shadow-2xl z-30"
+                initial={{ x: '100%' }}
                 animate={{
                     x: navModalOpen ? '0%' : '100%',
                 }}
