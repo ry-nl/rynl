@@ -239,7 +239,7 @@ export default function Landing() {
                             transition: { duration: 0.2 },
                         }}
                     >
-                        <Circle className="w-2 h-2" /> WORK
+                        <Circle className="w-[8px] h-[8px]" /> WORK
                     </motion.a>
                     <motion.a
                         href={'/about'}
@@ -251,7 +251,7 @@ export default function Landing() {
                             transition: { duration: 0.2 },
                         }}
                     >
-                        <Circle className="w-2 h-2" /> ABOUT
+                        <Circle className="w-[8px] h-[8px]" /> ABOUT
                     </motion.a>
                     <motion.a
                         href={'/contact'}
@@ -263,7 +263,7 @@ export default function Landing() {
                             transition: { duration: 0.2 },
                         }}
                     >
-                        <Circle className="w-2 h-2" /> CONTACT
+                        <Circle className="w-[8px] h-[8px]" /> CONTACT
                     </motion.a>
                     <motion.a
                         href={'/'}
@@ -275,7 +275,7 @@ export default function Landing() {
                             transition: { duration: 0.2 },
                         }}
                     >
-                        <Circle className="w-2 h-2" /> BACK TO TOP
+                        <Circle className="w-[8px] h-[8px]" /> BACK TO TOP
                     </motion.a>
                 </div>
             </motion.div>
