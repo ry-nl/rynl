@@ -1,21 +1,11 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import {
-    motion,
-    useScroll,
-    useTransform,
-    useInView,
-    // easeInOut,
-    // circInOut,
-} from 'framer-motion'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Image from 'next/image'
 // import Link from 'next/link'
 
-// import CodeIcon from '@mui/icons-material/Code'
-
 import ParallaxText from '../ParallaxText'
 import StickyComponent from '../StickyComponent'
-// import Magnetic from '../Magnetic'
 import { SlideButtonLightRight, SlideButtonDarkUp } from '../Buttons'
 
 import PhotoWebsite from '@/public/photoWebsite.jpg'
@@ -24,16 +14,10 @@ import ArchWebsite from '@/public/archWebsite.jpg'
 import CryptoWebsite from '@/public/cryptoWebsite.jpg'
 import GalleryWebsite from '@/public/galleryWebsite.jpg'
 import SocialWebsite from '@/public/socialWebsite.jpg'
-
-// import layrImage from '@/public/layr.jpg'
-// import layrHomepageImage from '@/public/layrHomepage.jpg'
 import awsImage from '@/public/aws1.png'
 import recoverImage from '@/public/recover1.jpg'
-// import selfImage from '@/public/self.jpg'
 
-// import LanguageIcon from '@mui/icons-material/Language'
 import { Menu, Circle } from '@mui/icons-material'
-// import { Stick } from 'next/font/google'
 
 export default function Landing() {
     // background video effect
@@ -92,7 +76,6 @@ export default function Landing() {
             width: 32,
             height: 32,
             backgroundColor: '#2d86fa',
-            // opacity: 0,
         },
     }
 
@@ -112,11 +95,6 @@ export default function Landing() {
             width: 24,
             height: 24,
             backgroundColor: '#2d86fa',
-            // filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))',
-            // color: 'white',
-            // fontWeight: '300',
-            // fontSize: '20px',
-            // letterSpacing: '0.025em',
         },
     }
 
@@ -127,19 +105,24 @@ export default function Landing() {
     const [navModalOpen, setNavModalOpen] = useState(false)
 
     // website gallery horizontal translate effect
-    const workRef = useRef(null)
+    const workRef1 = useRef(null)
+    const workRef2 = useRef(null)
 
-    const { scrollYProgress: workScrollYProgress } = useScroll({
-        target: workRef,
+    const { scrollYProgress: workScrollYProgress1 } = useScroll({
+        target: workRef1,
         offset: ['0 1', '1 0'],
     })
 
-    const work1X = useTransform(workScrollYProgress, [0, 1], ['0', '-130px'])
-    const work2X = useTransform(workScrollYProgress, [0, 1], ['0', '130px'])
+    const { scrollYProgress: workScrollYProgress2 } = useScroll({
+        target: workRef2,
+        offset: ['0 1', '1 0'],
+    })
+
+    const work1X = useTransform(workScrollYProgress1, [0, 1], ['2vw', '-5vw'])
+    const work2X = useTransform(workScrollYProgress2, [0, 1], ['-2vw', '5vw'])
 
     // recent work hover effect
     const [workLinkHovered, setWorkLinkHovered] = useState(-1)
-    const [cursorContent, setCursorContent] = useState('')
 
     const workLinkVariants = {
         default: {
@@ -424,9 +407,8 @@ export default function Landing() {
                     </div>
                 </section>
                 <section
-                    ref={workRef}
                     id="work-section-container"
-                    className="relative flex h-fit bg-light z-10"
+                    className="relative h-fit bg-light z-10"
                     onMouseEnter={() => setCursorVariant('defaultDark')}
                     onMouseLeave={() => setCursorVariant('defaultLight')}
                 >
@@ -435,6 +417,7 @@ export default function Landing() {
                         className="w-screen text-6xl font-light py-24"
                     >
                         <motion.div
+                            ref={workRef1}
                             id="gallery-container1"
                             className="flex w-full gap-x-8"
                             style={{ x: work1X }}
@@ -442,20 +425,21 @@ export default function Landing() {
                             <Image
                                 src={TeaWebsite}
                                 alt="tea website"
-                                className="object-cover h-[20rem] w-[33rem] p-6 bg-[#a3afb5]"
+                                className="object-cover h-[40vh] w-[33vw] p-6 bg-[#a3afb5]"
                             />
                             <Image
                                 src={ArchWebsite}
                                 alt="arch website"
-                                className="object-cover h-[20rem] w-[33rem] p-6 bg-[#d1cac5]"
+                                className="object-cover h-[40vh] w-[33vw] p-6 bg-[#d1cac5]"
                             />
                             <Image
                                 src={PhotoWebsite}
                                 alt="photo website"
-                                className="object-cover h-[20rem] w-[33rem] p-6 bg-[#574c43]"
+                                className="object-cover h-[40vh] w-[33vw] p-6 bg-[#574c43]"
                             />
                         </motion.div>
                         <motion.div
+                            ref={workRef2}
                             id="gallery-container2"
                             className="flex justify-end w-full gap-x-8 py-6"
                             style={{ x: work2X }}
@@ -463,17 +447,17 @@ export default function Landing() {
                             <Image
                                 src={CryptoWebsite}
                                 alt="crypto website"
-                                className="object-cover h-[20rem] w-[33rem] p-6 bg-[#7f997c]"
+                                className="object-cover h-[40vh] w-[33vw] p-6 bg-[#7f997c]"
                             />
                             <Image
                                 src={SocialWebsite}
                                 alt="social website"
-                                className="object-cover h-[20rem] w-[33rem] p-6 bg-[#84868c]"
+                                className="object-cover h-[40vh] w-[33vw] p-6 bg-[#84868c]"
                             />
                             <Image
                                 src={GalleryWebsite}
                                 alt="gallery website"
-                                className="object-cover h-[20rem] w-[33rem] p-6 bg-[#ab9a9a]"
+                                className="object-cover h-[40vh] w-[33vw] p-6 bg-[#ab9a9a]"
                             />
                         </motion.div>
                     </div>
