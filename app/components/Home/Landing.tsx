@@ -118,8 +118,8 @@ export default function Landing() {
         offset: ['0 1', '1 0'],
     })
 
-    const work1X = useTransform(workScrollYProgress1, [0, 1], ['2vw', '-5vw'])
-    const work2X = useTransform(workScrollYProgress2, [0, 1], ['-2vw', '5vw'])
+    const work1X = useTransform(workScrollYProgress1, [0, 1], ['4vw', '-4vw'])
+    const work2X = useTransform(workScrollYProgress2, [0, 1], ['-4vw', '4vw'])
 
     // recent work hover effect
     const [workLinkHovered, setWorkLinkHovered] = useState(-1)
@@ -289,7 +289,6 @@ export default function Landing() {
                     onClick={() => setNavModalOpen(false)}
                 />
             )}
-
             <div className="z-10" onClick={() => setNavModalOpen(false)}>
                 <section
                     ref={heroRef}
@@ -416,12 +415,12 @@ export default function Landing() {
                 >
                     <div
                         id="section-content"
-                        className="w-screen text-6xl font-light py-24"
+                        className="flex-col justify-center items-center w-screen text-6xl font-light py-24"
                     >
                         <motion.div
                             ref={workRef1}
                             id="gallery-container1"
-                            className="flex w-full gap-x-8"
+                            className="flex justify-center items-center w-full gap-x-8"
                             style={{ x: work1X }}
                         >
                             <Image
@@ -443,7 +442,7 @@ export default function Landing() {
                         <motion.div
                             ref={workRef2}
                             id="gallery-container2"
-                            className="flex justify-end w-full gap-x-8 py-6"
+                            className="flex justify-center items-center w-full gap-x-8 py-6"
                             style={{ x: work2X }}
                         >
                             <Image
@@ -521,7 +520,7 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark">
+                                        <h1 className="p-2 bg-dark rounded-xl">
                                             Visit Repo
                                         </h1>
                                     </motion.div>
@@ -575,7 +574,7 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark">
+                                        <h1 className="p-2 bg-dark rounded-xl">
                                             Visit Repo
                                         </h1>
                                     </motion.div>
@@ -629,7 +628,7 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark">
+                                        <h1 className="p-2 bg-dark rounded-xl">
                                             Visit Repo
                                         </h1>
                                     </motion.div>
@@ -683,7 +682,7 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark">
+                                        <h1 className="p-2 bg-dark rounded-xl">
                                             Visit Repo
                                         </h1>
                                     </motion.div>
@@ -742,14 +741,16 @@ export default function Landing() {
                             <hr className="absolute w-full" />
                             <div className="absolute -translate-y-1/4 pr-24">
                                 <StickyComponent>
-                                    <motion.div
+                                    <motion.a
                                         className="flex justify-center items-center h-64 w-64 bg-light rounded-full"
                                         whileHover={{
                                             backgroundColor: '#2d86fa',
                                         }}
+                                        href="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=drive_link"
+                                        target="_blank"
                                     >
                                         download cv
-                                    </motion.div>
+                                    </motion.a>
                                 </StickyComponent>
                             </div>
                         </div>
