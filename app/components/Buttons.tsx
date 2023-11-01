@@ -11,6 +11,7 @@ export function SlideButtonLightRight({
         <div className="w-full h-24 flex items-center justify-center">
             <a
                 href={link}
+                target="_blank"
                 className="relative inline-flex justify-center items-center py-6 px-12 overflow-hidden transition duration-300 ease-out border border-black/30 rounded-full shadow-md group"
             >
                 <span className="absolute -inset-x-[1px] flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-dark rounded-full group-hover:translate-x-[1px] ease">
@@ -38,6 +39,7 @@ export function SlideButtonDarkUp({
         <div className="w-full h-24 flex items-center justify-center">
             <a
                 href={link}
+                target="_blank"
                 className="relative inline-flex justify-center items-center py-4 px-12 overflow-hidden transition duration-300 ease-out border border-white/30 rounded-full shadow-md group"
             >
                 <span className="absolute -inset-y-[0px] flex items-center justify-center w-full h-full text-black duration-300 translate-y-full bg-white rounded-full group-hover:-translate-y-[0px] ease">
