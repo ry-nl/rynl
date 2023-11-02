@@ -727,9 +727,9 @@ export default function Landing() {
                 >
                     <div
                         id="section-content"
-                        className="flex flex-col gap-20 justify-center w-full h-full text-white px-36"
+                        className="flex flex-col justify-center w-full h-full text-white px-36"
                     >
-                        <div className="text-white font-thin">
+                        <div className="text-white font-thin pb-24 border-b">
                             <h1 className="pb-8 text-3xl text-white/70">
                                 Thanks for stopping by!
                             </h1>
@@ -737,12 +737,12 @@ export default function Landing() {
                                 Let&apos;s Make Great Things.
                             </h1>
                         </div>
-                        <div className="relative flex justify-end items-center text-black font-thin text-2xl drop-shadow-2xl">
+                        <div className="relative flex justify-end items-center text-black font-thin text-xl drop-shadow-2xl">
                             <hr className="absolute w-full" />
-                            <div className="absolute -translate-y-1/4 pr-24">
+                            <div className="absolute pr-24">
                                 <StickyComponent>
                                     <motion.a
-                                        className="flex justify-center items-center h-64 w-64 bg-light rounded-full"
+                                        className="flex justify-center items-center h-48 w-48 bg-light rounded-full"
                                         whileHover={{
                                             backgroundColor: '#2d86fa',
                                         }}
@@ -754,7 +754,7 @@ export default function Landing() {
                                 </StickyComponent>
                             </div>
                         </div>
-                        <div className="text-white text-4xl font-light z-20">
+                        <div className="text-white text-4xl font-light pt-24 z-20">
                             <div className="flex gap-8">
                                 <div
                                     id="github-button-container"
@@ -794,6 +794,21 @@ export default function Landing() {
                                         />
                                     </div>
                                 </div>
+                                {/* <div
+                                    id="phone-button-container"
+                                    className="flex justify-center font-thin tracking-wide text-xl"
+                                >
+                                    <div
+                                        className="w-full"
+                                        onMouseEnter={() => {
+                                            setCursorVariant('link')
+                                        }}
+                                        onMouseLeave={() => {
+                                            setCursorVariant('defaultLight')
+                                        }}
+                                    >
+                                    </div>
+                                </div> */}
                                 <div
                                     id="email-button-container"
                                     className="flex justify-center font-thin tracking-wide text-xl"
@@ -826,7 +841,7 @@ export default function Landing() {
                                         }}
                                     >
                                         <SlideButtonDarkUp
-                                            buttonText="(702)626-3161"
+                                            buttonText="(702)6263161"
                                             link="/contact"
                                             popupText="→"
                                         />
@@ -837,7 +852,7 @@ export default function Landing() {
                     </div>
                     <div className="absolute flex justify-between bottom-0 p-6 w-full text-white/50 tracking-wide font-thin">
                         <h1>Based in Los Angeles, CA</h1>
-                        <h1>
+                        <h1 className="hidden lg:block">
                             Built with Next.js, Tailwind CSS, and Framer Motion
                         </h1>
                         <h1>© 2023 Ryan Lee - All Rights Reserved</h1>
