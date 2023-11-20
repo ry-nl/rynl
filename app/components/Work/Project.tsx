@@ -52,8 +52,8 @@ export default function Project({
                     Features and Accomplishments
                 </h2>
                 <ul className="list-disc text-lg font-thin tracking-wide leading-relaxed space-y-1 pl-4">
-                    {accomplishments.map((accomplishment) => (
-                        <li>{accomplishment}</li>
+                    {accomplishments.map((accomplishment, index) => (
+                        <li key={index}>{accomplishment}</li>
                     ))}
                 </ul>
             </div>
