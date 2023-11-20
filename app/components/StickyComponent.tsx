@@ -19,6 +19,7 @@ export default function Framer({ children }: { children: React.ReactNode }) {
     }
 
     const { x, y } = position
+
     return (
         <motion.div
             style={{ position: 'relative' }}

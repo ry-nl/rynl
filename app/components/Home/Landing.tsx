@@ -189,7 +189,7 @@ export default function Landing() {
                 variants={cursorVariants}
                 animate={cursorVariant}
                 transition={{
-                    duration: 0.1,
+                    duration: 0,
                 }}
             />
             <motion.div
@@ -197,7 +197,7 @@ export default function Landing() {
                 variants={smallCursorVariants}
                 animate={cursorVariant}
                 transition={{
-                    duration: 0.15,
+                    duration: 0.1,
                     ease: 'easeOut',
                 }}
             >
@@ -307,7 +307,8 @@ export default function Landing() {
                         <source src="/bg-video-720.mp4" type="video/mp4" />
                     </motion.video>
                     <nav className="sticky flex justify-between top-0 inset-x-0 h-fit py-4 px-24 text-lg font-thin tracking-widest border-b border-white/50">
-                        <motion.h1
+                        <motion.a
+                            href="/"
                             className="nav-button"
                             onMouseEnter={() => {
                                 setCursorVariant('link')
@@ -317,8 +318,9 @@ export default function Landing() {
                             }}
                         >
                             HOME
-                        </motion.h1>
-                        <motion.h1
+                        </motion.a>
+                        <motion.a
+                            href="/work"
                             className="nav-button"
                             onMouseEnter={() => {
                                 setCursorVariant('link')
@@ -328,8 +330,9 @@ export default function Landing() {
                             }}
                         >
                             WORK
-                        </motion.h1>
-                        <motion.h1
+                        </motion.a>
+                        <motion.a
+                            href="/about"
                             className="nav-button"
                             onMouseEnter={() => {
                                 setCursorVariant('link')
@@ -339,8 +342,9 @@ export default function Landing() {
                             }}
                         >
                             ABOUT
-                        </motion.h1>
-                        <motion.h1
+                        </motion.a>
+                        <motion.a
+                            href="/contact"
                             className="nav-button"
                             onMouseEnter={() => {
                                 setCursorVariant('link')
@@ -350,7 +354,7 @@ export default function Landing() {
                             }}
                         >
                             CONTACT
-                        </motion.h1>
+                        </motion.a>
                     </nav>
                     <div className="absolute bottom-0 text-white/20 tracking-tight">
                         <ParallaxText baseVelocity={1}>
@@ -737,8 +741,7 @@ export default function Landing() {
                                 Let&apos;s Make Great Things.
                             </h1>
                         </div>
-                        <div className="relative flex justify-end items-center text-black font-thin text-xl drop-shadow-2xl">
-                            <hr className="absolute w-full" />
+                        <div className="relative flex justify-end items-center text-black font-thin text-xl drop-shadow-2xl z-20">
                             <div className="absolute pr-24">
                                 <StickyComponent>
                                     <motion.a
@@ -754,7 +757,7 @@ export default function Landing() {
                                 </StickyComponent>
                             </div>
                         </div>
-                        <div className="text-white text-4xl font-light pt-24 z-20">
+                        <div className="text-white text-4xl font-light pt-24">
                             <div className="flex gap-8">
                                 <div
                                     id="github-button-container"
@@ -852,7 +855,7 @@ export default function Landing() {
                     </div>
                     <div className="absolute flex justify-between bottom-0 p-6 w-full text-white/50 tracking-wide font-thin">
                         <h1>Based in Los Angeles, CA</h1>
-                        <h1 className="hidden lg:block">
+                        <h1 className="hidden md:block">
                             Built with Next.js, Tailwind CSS, and Framer Motion
                         </h1>
                         <h1>© 2023 Ryan Lee - All Rights Reserved</h1>
