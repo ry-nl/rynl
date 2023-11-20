@@ -94,6 +94,7 @@ export default function Work() {
             <div id="work-container">
                 {ProjectData.map((project, index) => (
                     <Project
+                        key={index}
                         order={index + 1}
                         name={project.name}
                         company={project.company}
