@@ -37,9 +37,9 @@ export default function Project({
                         [
                         {tools.map((tool, index) =>
                             index < tools.length - 1 ? (
-                                <span> {tool}, </span>
+                                <span key={index}> {tool}, </span>
                             ) : (
-                                <span>{tool} </span>
+                                <span key={index}>{tool} </span>
                             )
                         )}
                         ]
