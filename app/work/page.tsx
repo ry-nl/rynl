@@ -90,7 +90,7 @@ export default function Work() {
  -z-100 scale-125"
             >
                 <source
-                    src="/workSectionBackgroundVideo.mp4"
+                    src="/workSectionBackgroundVideo720.mp4"
                     type="video/mp4"
                 />
             </video>
