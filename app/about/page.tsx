@@ -62,23 +62,7 @@ export default function About() {
     }
     return (
         <main className="flex justify-center items-center w-full h-screen bg-dark text-4xl font-sans font-light text-white">
-            <div className="flex justify-evenly w-full h-full">
-                <div className="w-1/2"></div>
-                <div className="w-1/2 text-xl">
-                    Nice to meet you! My name is Ryan, I am a software engineer
-                    based in Los Angeles, CA. I have experience in both startup
-                    and large company settings, working with cutting-edge
-                    technologies and collaborating with talented engineers to
-                    create scalable and reliable end-to-end solutions. I have
-                    gained valuable experience in developing and deploying
-                    back-end services, designing intuitive front-end UIs, and
-                    optimizing software performance and security. I pride myself
-                    in prioritizing quality and developing with a user-first
-                    approach, and am always eager to explore new opportunities
-                    to grow as a software engineer. Thank you for stopping by my
-                    page!
-                </div>
-            </div>
+            Contact page in progress!
         </main>
     )
 }
