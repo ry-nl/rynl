@@ -710,7 +710,7 @@ export default function Landing() {
                                         whileHover={{
                                             backgroundColor: '#2d86fa',
                                         }}
-                                        href="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=drive_link"
+                                        href="https://drive.google.com/file/d/1URQZpYpo839ZNmH_ihf91Q9hQT_Q4cQX/view"
                                         target="_blank"
                                     >
                                         download cv
