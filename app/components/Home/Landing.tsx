@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Image from 'next/image'
-// import Link from 'next/link'
+import Link from 'next/link'
 
 import ParallaxText from '../ParallaxText'
 import StickyComponent from '../StickyComponent'
@@ -14,8 +14,8 @@ import ArchWebsite from '@/public/archWebsite.jpg'
 import CryptoWebsite from '@/public/cryptoWebsite.jpg'
 import GalleryWebsite from '@/public/galleryWebsite.jpg'
 import SocialWebsite from '@/public/socialWebsite.jpg'
-import awsImage from '@/public/aws1.png'
-import recoverImage from '@/public/recover1.jpg'
+import AWSLogo from '@/public/AWSLogo.png'
+import KiteLogo from '@/public/kiteLogo.jpg'
 
 import { Menu, Circle } from '@mui/icons-material'
 
@@ -373,7 +373,7 @@ export default function Landing() {
                     </div> */}
                     </div>
                     <div className="absolute right-24 top-1/2 -translate-y-1/2 font-thin text-2xl text-white/70 z-10 hidden lg:block">
-                        <div className="pb-12">Based in Los Angeles, CA</div>
+                        <div className="pb-12">Based in San Francisco, CA</div>
                         <div>University of Southern California,</div>
                         <div>B.S. Computer Science</div>
                     </div>
@@ -478,7 +478,7 @@ export default function Landing() {
                         className="w-full h-full px-24 text-7xl font-light tracking-wide"
                     >
                         <h1 className="text-lg pl-24 pb-8 tracking-normal text-black/50">
-                            RECENT WORK
+                            EXPERIENCE
                         </h1>
                         <div className="flex flex-col">
                             <motion.div
@@ -499,10 +499,10 @@ export default function Landing() {
                                             : 'default'
                                     }
                                 >
-                                    WARDEN
+                                    AWS
                                 </motion.h1>
                                 <motion.div
-                                    className="relative flex justify-center items-center rounded-sm bg-[#d1cac5] drop-shadow-2xl z-10"
+                                    className="relative flex justify-center items-center rounded-sm bg-[#f2f2f2] drop-shadow-2xl z-10"
                                     variants={workModalVariants}
                                     animate={
                                         workLinkHovered == 0
@@ -524,12 +524,17 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark rounded-xl">
-                                            Visit Repo
-                                        </h1>
+                                        <Link
+                                            className="flex w-full h-full justify-center items-center"
+                                            href="https://aws.amazon.com/"
+                                        >
+                                            <h1 className="p-2">
+                                                Visit Website
+                                            </h1>
+                                        </Link>
                                     </motion.div>
                                     <Image
-                                        src={awsImage}
+                                        src={AWSLogo}
                                         alt="aws image"
                                         className="w-full px-6 object-cover"
                                     />
@@ -553,7 +558,7 @@ export default function Landing() {
                                             : 'default'
                                     }
                                 >
-                                    LAYR
+                                    POLARITY
                                 </motion.h1>
                                 <motion.div
                                     className="relative flex justify-center items-center rounded-sm drop-shadow-2xl z-10"
@@ -578,9 +583,14 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark rounded-xl">
-                                            Visit Repo
-                                        </h1>
+                                        <Link
+                                            className="flex w-full h-full justify-center items-center"
+                                            href="https://aws.amazon.com/"
+                                        >
+                                            <h1 className="p-2">
+                                                Visit Website
+                                            </h1>
+                                        </Link>
                                     </motion.div>
                                     <Image
                                         src={CryptoWebsite}
@@ -607,7 +617,7 @@ export default function Landing() {
                                             : 'default'
                                     }
                                 >
-                                    BULLETIN
+                                    KITE
                                 </motion.h1>
                                 <motion.div
                                     className="relative flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
@@ -632,67 +642,18 @@ export default function Landing() {
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <h1 className="p-2 bg-dark rounded-xl">
-                                            Visit Repo
-                                        </h1>
+                                        <Link
+                                            className="flex w-full h-full justify-center items-center"
+                                            href="https://aws.amazon.com/"
+                                        >
+                                            <h1 className="p-2">
+                                                Visit Website
+                                            </h1>
+                                        </Link>
                                     </motion.div>
                                     <Image
-                                        src={SocialWebsite}
+                                        src={KiteLogo}
                                         alt="bulletin image"
-                                        className="h-full object-cover"
-                                    />
-                                </motion.div>
-                            </motion.div>
-                            <motion.div
-                                className="flex items-center h-fit px-24 py-4 border-solid border-b border-black/30"
-                                onMouseEnter={() => {
-                                    setWorkLinkHovered(3)
-                                }}
-                                onMouseLeave={() => {
-                                    setWorkLinkHovered(-1)
-                                }}
-                            >
-                                <motion.h1
-                                    className="flex items-center w-full h-full"
-                                    variants={workLinkVariants}
-                                    animate={
-                                        workLinkHovered == 3
-                                            ? 'hovered'
-                                            : 'default'
-                                    }
-                                >
-                                    RECOVER
-                                </motion.h1>
-                                <motion.div
-                                    className="relative flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
-                                    variants={workModalVariants}
-                                    animate={
-                                        workLinkHovered == 3
-                                            ? 'visible'
-                                            : 'hidden'
-                                    }
-                                    onMouseEnter={() => {
-                                        setCursorVariant('link')
-                                    }}
-                                    onMouseLeave={() => {
-                                        setCursorVariant('defaultDark')
-                                    }}
-                                >
-                                    <motion.div
-                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
-                                        whileHover={{
-                                            opacity: 1,
-                                            backdropFilter: 'blur(1px)',
-                                            transition: { duration: 0.2 },
-                                        }}
-                                    >
-                                        <h1 className="p-2 bg-dark rounded-xl">
-                                            Visit Repo
-                                        </h1>
-                                    </motion.div>
-                                    <Image
-                                        src={recoverImage}
-                                        alt="recover image"
                                         className="h-full object-cover"
                                     />
                                 </motion.div>
@@ -844,7 +805,7 @@ export default function Landing() {
                                         }}
                                     >
                                         <SlideButtonDarkUp
-                                            buttonText="(702)6263161"
+                                            buttonText="+1 702 626 3161"
                                             link="/contact"
                                             popupText="→"
                                         />
@@ -854,11 +815,11 @@ export default function Landing() {
                         </div>
                     </div>
                     <div className="absolute flex justify-between bottom-0 p-6 w-full text-white/50 tracking-wide font-thin">
-                        <h1>Based in Los Angeles, CA</h1>
+                        <h1>Based in San Francisco, CA</h1>
                         <h1 className="hidden md:block">
                             Built with Next.js, Tailwind CSS, and Framer Motion
                         </h1>
-                        <h1>© 2023 Ryan Lee - All Rights Reserved</h1>
+                        <h1>© 2025 Ryan Lee - All Rights Reserved</h1>
                     </div>
                 </section>
             </div>
