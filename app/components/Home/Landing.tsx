@@ -14,7 +14,7 @@ import ArchWebsite from '@/public/archWebsite.jpg'
 import CryptoWebsite from '@/public/cryptoWebsite.jpg'
 import GalleryWebsite from '@/public/galleryWebsite.jpg'
 import SocialWebsite from '@/public/socialWebsite.jpg'
-import AWSLogo from '@/public/AWSLogo.png'
+import AWSLogo from '@/public/awsLogo.png'
 import KiteLogo from '@/public/kiteLogo.jpg'
 
 import { Menu, Circle } from '@mui/icons-material'
