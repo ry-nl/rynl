@@ -14,8 +14,11 @@ export default function Experience({
     dates,
     image,
 }: experienceProps) {
+    var borderStyle = company === 'Kite' ? 'y' : 't'
     return (
-        <div className="relative flex justify-between items-center h-fit p-24 border-t border-white">
+        <div
+            className={`relative flex justify-between items-center h-fit p-24 border-${borderStyle} border-white`}
+        >
             <div className="relative w-[25%]">
                 <Image
                     className="aspect-square rounded-full object-cover"

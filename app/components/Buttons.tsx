@@ -36,11 +36,11 @@ export function SlideButtonDarkUp({
     popupText: string
 }) {
     return (
-        <div className="w-full h-24 flex items-center justify-center">
+        <div className="flex items-center justify-center h-24">
             <a
                 href={link}
                 target="_blank"
-                className="relative inline-flex justify-center items-center py-4 px-12 overflow-hidden transition duration-300 ease-out border border-white/30 rounded-full shadow-md group"
+                className="shrink-0 relative inline-flex justify-center items-center py-4 px-12 overflow-hidden transition duration-300 ease-out border border-white/30 rounded-full shadow-md group"
             >
                 <span className="absolute -inset-y-[0px] flex items-center justify-center w-full h-full text-black duration-300 translate-y-full bg-white rounded-full group-hover:-translate-y-[0px] ease">
                     {popupText}

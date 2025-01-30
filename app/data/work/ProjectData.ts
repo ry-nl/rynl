@@ -1,6 +1,6 @@
 import { StaticImageData } from 'next/image'
 
-import AWSImage from '@/public/aws2.png'
+import AWSImage from '@/public/aws2.jpg'
 import PolarityLogo from '@/public/polarityLogo.jpg'
 import KiteLogo from '@/public/kiteLogo2.jpg'
 

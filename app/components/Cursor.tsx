@@ -1,12 +1,11 @@
-'use client'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
-export default function About() {
+export default function Cursor({ cursorVariant }: { cursorVariant: string }) {
     const [mousePosition, setMousePosition] = useState({
         x: 0,
         y: 0,
     })
-    const [cursorVariant, setCursorVariant] = useState('defaultLight')
 
     useEffect(() => {
         const mouseMove = (e: any) => {
@@ -60,9 +59,26 @@ export default function About() {
             backgroundColor: '#2d86fa',
         },
     }
+
     return (
-        <main className="flex justify-center items-center w-full h-screen bg-dark text-4xl font-sans font-light text-white">
-            About page in progress!
-        </main>
+        <motion.div>
+            <motion.div
+                className="cursor"
+                variants={cursorVariants}
+                animate={cursorVariant}
+                transition={{
+                    duration: 0,
+                }}
+            />
+            <motion.div
+                className="small-cursor flex justify-center items-center"
+                variants={smallCursorVariants}
+                animate={cursorVariant}
+                transition={{
+                    duration: 0.1,
+                    ease: 'easeOut',
+                }}
+            />
+        </motion.div>
     )
 }
