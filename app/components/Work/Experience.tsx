@@ -14,7 +14,7 @@ export default function Experience({
     dates,
     image,
 }: experienceProps) {
-    var borderStyle = company === 'Kite' ? 'y' : 't'
+    const borderStyle = company === 'Kite' ? 'y' : 't'
     return (
         <div
             className={`relative flex justify-between items-center h-fit p-24 border-${borderStyle} border-white`}

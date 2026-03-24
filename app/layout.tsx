@@ -7,8 +7,6 @@ import { DM_Sans } from 'next/font/google'
 import { Montserrat } from 'next/font/google'
 import { DM_Serif_Display } from 'next/font/google'
 
-// components
-import Navbar from './components/Navbar'
 
 const neueMontreal = localFont({
     src: [
