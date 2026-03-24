@@ -1,116 +1,72 @@
-import { StaticImageData } from 'next/image'
-
-import AWSImage from '@/public/aws2.jpg'
-import PolarityLogo from '@/public/polarityLogo.jpg'
-import KiteLogo from '@/public/kiteLogo2.jpg'
-
-interface experienceItem {
+export interface ExperienceItem {
     company: string
-    position: string
+    role: string
     dates: string
-    image: StaticImageData
+    technologies: string[]
+    accomplishments: string[]
 }
 
-export const ExperienceData: experienceItem[] = [
+export const ExperienceData: ExperienceItem[] = [
     {
-        company: 'Amazon Web Services',
-        position: 'Software Development Engineer',
-        dates: 'Oct 2023 - Present',
-        image: AWSImage,
+        company: 'Salesforce',
+        role: 'Software Engineer II (MTS)',
+        dates: 'Mar 2025 — Present',
+        technologies: ['Java', 'Python', 'AWS', 'Kubernetes'],
+        accomplishments: [
+            'Re-engineered priority-based autoscaling system to scale WhatsApp channel from 15M to 300M monthly messages',
+            'Designed reusable multi-stage deduplication framework, reducing on-call pages by 28% and third-party API consumption by 11%',
+            'Launched typing indicators and read receipts features, improving user retention by 39%',
+            'Led cross-team initiative to integrate Meta templates into Salesforce platform, driving acquisition of 2 new enterprise customers',
+        ],
     },
     {
         company: 'Amazon Web Services',
-        position: 'Intern Software Development Engineer',
-        dates: 'May 2023 - Aug 2023',
-        image: AWSImage,
+        role: 'Software Development Engineer I',
+        dates: 'Oct 2023 — Mar 2025',
+        technologies: ['Go', 'Python', 'Ruby', 'Perl', 'Lua', 'AWS'],
+        accomplishments: [
+            'Took ownership of critical monitoring services delivering real-time fleet data to 100+ AWS teams at 99.8% parity',
+            'Designed and launched service to collect and aggregate 200TB of hourly telemetry consumed by EC2, EBS, and S3',
+            'Developed algorithm to mitigate excessive polling and false positive alarming, decreasing on-call tickets by 12% and saving $30K/month',
+            'Coordinated expansion of monitoring for 45 new platforms to be launched across AWS',
+        ],
     },
     {
-        company: 'Layr/Polarity',
-        position: 'Full-Stack Software Developer',
-        dates: 'July 2022 - Feb 2023',
-        image: PolarityLogo,
+        company: 'Amazon Web Services',
+        role: 'Software Development Engineer Intern',
+        dates: 'May 2023 — Aug 2023',
+        technologies: ['Go', 'Python', 'AWS'],
+        accomplishments: [
+            'Spearheaded development of reworked daemon service to detect and process failures within the AWS fleet',
+            'Converted daemon sub-processes to threads, improving memory and compute efficiency by 80% during high traffic',
+            'Devised method to deploy service as a platform-agnostic binary, eliminating version compatibility issues',
+        ],
     },
     {
-        company: 'Kite',
-        position: 'Intern Software Engineer',
-        dates: 'Jun 2021 - Aug 2021',
-        image: KiteLogo,
+        company: 'Pepper Labs',
+        role: 'Back-End Software Development Engineer',
+        dates: 'Jul 2022 — Feb 2023',
+        technologies: ['TypeScript', 'Swift', 'React Native', 'GraphQL', 'Apollo', 'MongoDB'],
+        accomplishments: [
+            'Led back-end architecture and development of mobile cryptocurrency trading platform, launching MVP 3 months ahead of schedule',
+            'Drove integration of Redux-based caching to eliminate redundant API requests, halving application latency',
+            'Developed routing algorithm to generate and execute token swap routes, reducing user transfer fees by up to 65%',
+            'Engineered method to generate wallet access key without storage of credentials, addressing user privacy concerns',
+        ],
     },
 ]
 
-// interface projectItem {
-//     name: string
-//     company: string
-//     position: string
-//     tools: string[]
-//     description: string
-//     accomplishments: string[]
-//     image: StaticImageData
-//     scale: number
-// }
+export const EducationData = {
+    school: 'University of Southern California',
+    degree: 'B.S. Computer Science',
+    dates: 'Aug 2020 — May 2023',
+    honors: 'Viterbi Dean\'s List',
+}
 
-// export const ProjectData: projectItem[] = [
-//     {
-//         name: 'Warden',
-//         company: 'Amazon Web Services',
-//         position: 'Backend Developer',
-//         tools: ['Go', 'Python', 'AWS'],
-//         description:
-//             'Warden is a daemon process that monitors the health and security of AWS servers, designed to collect vital hardware data and notifying downstream consumers of any failures. Warden is currently deployed on the AWS EC2 fabric for Amazon Linux 2 and up.',
-//         accomplishments: [
-//             'Support for periodic and on-demand data collection',
-//             'Service to be installed on over two-thirds of all AWS hosts',
-//             'Devised method to remove all runtime dependencies and deploy service as a standalone binary, eliminating OS and architecture-related versioning issues',
-//             'Initiated design decision to convert data collection subprocesses to threads, reducing memory footprint by 60% and increasing average execution speed by up to 200%',
-//             'Executed migration to new credential management service for authenticating access to AWS resources',
-//         ],
-//         image: AWSImage,
-//     },
-//     {
-//         name: 'Layr',
-//         company: 'Pepper Labs',
-//         position: 'Backend Developer',
-//         tools: ['TypeScript', 'React Native', 'GraphQL', 'Apollo', 'MongoDB'],
-//         description:
-//             'Layr is an iOS and Android application that allows users to easily and securely trade and manage their cryptocurrency assets.',
-//         accomplishments: [
-//             'Direct exchange between defi assets without need for an intermediary stablecoin',
-//             'Led backend architecture and development, successfully launched MVP 3 months ahead of schedule',
-//             'Spearheaded integration of Redux to eliminate redundant API requests, reducing application latency by over 60%',
-//             'Developed routing algorithm to generate and execute token swap routes that minimized transfer fees',
-//             'Addressed user privacy issue by engineering method to consistently generate wallet access key without storage of user credentials',
-//         ],
-//         image: PolarityLogo,
-//     },
-//     {
-//         name: 'ReCOVER',
-//         company: 'University of Southern California',
-//         position: 'Full Stack Developer',
-//         tools: ['NextJS', 'ChartJS'],
-//         description:
-//             'ReCOVER is a web application built for the USC Keck School of Medicine Infectious Disease Department. ReCOVER enables researchers to easily visualize and add new disease forecast data from a single metadata repository.',
-//         accomplishments: [
-//             'Support for multiple simultaneous data sources and chart types',
-//             'Custom metadata language to allow for easy addition of new data sources without the need for code changes',
-//             'Managed team of 6 developers and supervised team progress based on stakeholder needs to generate mockups and user stories',
-//             'Scheduled deliverable timeline and handled communications across multiple stakeholders',
-//         ],
-//         image: RecoverImage,
-//     },
-// {
-//     name: 'Covider',
-//     company: 'University of Southern California',
-//     position: 'Full Stack Developer',
-//     tools: ['Java', 'Android Studio', 'Python', 'Django', 'Firebase'],
-//     description:
-//         'Covider is an Android application to measure and display Covid risk levels associated with each campus building. The application provides an interface for students and faculty to report Covid symptoms and test results, and allows instructors to notify students of potential exposure or send class cancellations.',
-//     accomplishments: [
-//         'Map view of campus buildings with color-coded risk levels using Google Maps API',
-//         'Custom algorithm to calculate risk level based on user-reported symptoms and test results',
-//         'Server-side event loop to send live notifications to users based on location',
-//         'Test-driven development with extensive black and white box test suites',
-//         'Guided team through agile development cycle and introduced code-review practices',
-//     ],
-//     image:
-// },
-// ]
+export const SkillsData = {
+    languages: ['Python', 'Java', 'TypeScript', 'Go', 'Rust', 'Lua', 'Swift', 'SQL', 'NoSQL', 'GraphQL', 'HTML', 'CSS'],
+    skills: ['REST API', 'Infrastructure', 'Systems Design', 'Cloud Computing', 'Data Analysis', 'Algorithms'],
+    backEnd: ['AWS', 'Spring', 'MongoDB', 'Apollo', 'Express', 'Node', 'MySQL', 'Postgres'],
+    frontEnd: ['React', 'React Native', 'Redux', 'Next', 'Sass', 'Tailwind'],
+    other: ['Git', 'Postman', 'Docker', 'Kubernetes', 'Jupyter', 'Figma', 'CI/CD'],
+}

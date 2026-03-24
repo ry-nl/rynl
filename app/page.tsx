@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import ParallaxText from './components/ParallaxText'
 import StickyComponent from './components/StickyComponent'
@@ -15,10 +14,74 @@ import ArchWebsite from '@/public/archWebsite.jpg'
 import CryptoWebsite from '@/public/cryptoWebsite.jpg'
 import GalleryWebsite from '@/public/galleryWebsite.jpg'
 import SocialWebsite from '@/public/socialWebsite.jpg'
-import AWSLogo from '@/public/awsLogo.jpg'
-import KiteLogo from '@/public/kiteLogo.jpg'
 
 import { Menu, Circle } from '@mui/icons-material'
+import { StaticImageData } from 'next/image'
+
+interface GalleryImage {
+    src: StaticImageData
+    alt: string
+    bgColor: string
+}
+
+const galleryRows: GalleryImage[][] = [
+    [
+        { src: TeaWebsite, alt: 'tea website', bgColor: '#a3afb5' },
+        { src: ArchWebsite, alt: 'arch website', bgColor: '#d1cac5' },
+        { src: PhotoWebsite, alt: 'photo website', bgColor: '#574c43' },
+    ],
+    [
+        { src: CryptoWebsite, alt: 'crypto website', bgColor: '#7f997c' },
+        { src: SocialWebsite, alt: 'social website', bgColor: '#84868c' },
+        { src: GalleryWebsite, alt: 'gallery website', bgColor: '#ab9a9a' },
+    ],
+]
+
+function ParallaxGalleryRow({
+    images,
+    index,
+}: {
+    images: GalleryImage[]
+    index: number
+}) {
+    const ref = useRef(null)
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ['0 1', '1 0'],
+    })
+    const x = useTransform(
+        scrollYProgress,
+        [0, 1],
+        index % 2 === 0 ? ['4vw', '-4vw'] : ['-4vw', '4vw']
+    )
+    const imageWidth = `${Math.ceil(120 / images.length)}vw`
+
+    return (
+        <motion.div
+            ref={ref}
+            className={`flex justify-center gap-x-6 ${index > 0 ? 'py-8' : ''}`}
+            style={{ x }}
+        >
+            {images.map((img) => (
+                <Image
+                    key={img.alt}
+                    src={img.src}
+                    alt={img.alt}
+                    className="object-cover h-[40vh] shrink-0 p-3"
+                    style={{ backgroundColor: img.bgColor, width: imageWidth }}
+                    sizes={imageWidth}
+                />
+            ))}
+        </motion.div>
+    )
+}
+
+const experienceEntries = [
+    { name: 'SALESFORCE', link: 'https://www.salesforce.com/' },
+    { name: 'AWS', link: 'https://aws.amazon.com/' },
+    { name: 'POLARITY', link: 'https://polarity.io/' },
+    { name: 'KITE', link: 'https://www.kite.com/' },
+]
 
 export default function Landing() {
     // background video effect
@@ -48,47 +111,8 @@ export default function Landing() {
 
     const [navModalOpen, setNavModalOpen] = useState(false)
 
-    // website gallery horizontal translate effect
-    const workRef1 = useRef(null)
-    const workRef2 = useRef(null)
-
-    const { scrollYProgress: workScrollYProgress1 } = useScroll({
-        target: workRef1,
-        offset: ['0 1', '1 0'],
-    })
-
-    const { scrollYProgress: workScrollYProgress2 } = useScroll({
-        target: workRef2,
-        offset: ['0 1', '1 0'],
-    })
-
-    const work1X = useTransform(workScrollYProgress1, [0, 1], ['4vw', '-4vw'])
-    const work2X = useTransform(workScrollYProgress2, [0, 1], ['-4vw', '4vw'])
-
     // recent work hover effect
     const [workLinkHovered, setWorkLinkHovered] = useState(-1)
-
-    const workLinkVariants = {
-        default: {
-            opacity: 1,
-        },
-        hovered: {
-            opacity: 0.5,
-        },
-    }
-
-    const workModalVariants = {
-        visible: {
-            width: '700px',
-            height: '250px',
-            opacity: 1,
-        },
-        hidden: {
-            width: '350px',
-            height: '125px',
-            opacity: 0,
-        },
-    }
 
     // flavor in view effect
     const flavorTextRef = useRef(null)
@@ -320,50 +344,13 @@ export default function Landing() {
                         id="section-content"
                         className="flex-col justify-center items-center w-screen text-6xl font-light py-12"
                     >
-                        <motion.div
-                            ref={workRef1}
-                            id="gallery-container1"
-                            className="flex justify-center gap-x-8"
-                            style={{ x: work1X }}
-                        >
-                            <Image
-                                src={TeaWebsite}
-                                alt="tea website"
-                                className="object-cover h-[40vh] w-1/3 p-6 bg-[#a3afb5]"
+                        {galleryRows.map((images, index) => (
+                            <ParallaxGalleryRow
+                                key={index}
+                                images={images}
+                                index={index}
                             />
-                            <Image
-                                src={ArchWebsite}
-                                alt="arch website"
-                                className="object-cover h-[40vh] w-1/3 p-6 bg-[#d1cac5]"
-                            />
-                            <Image
-                                src={PhotoWebsite}
-                                alt="photo website"
-                                className="object-cover h-[40vh] w-1/3 p-6 bg-[#574c43]"
-                            />
-                        </motion.div>
-                        <motion.div
-                            ref={workRef2}
-                            id="gallery-container2"
-                            className="flex justify-center gap-x-8 py-8"
-                            style={{ x: work2X }}
-                        >
-                            <Image
-                                src={CryptoWebsite}
-                                alt="crypto website"
-                                className="object-cover h-[40vh] w-1/3 p-6 bg-[#7f997c]"
-                            />
-                            <Image
-                                src={SocialWebsite}
-                                alt="social website"
-                                className="object-cover h-[40vh] w-1/3 p-6 bg-[#84868c]"
-                            />
-                            <Image
-                                src={GalleryWebsite}
-                                alt="gallery website"
-                                className="object-cover h-[40vh] w-1/3 p-6 bg-[#ab9a9a]"
-                            />
-                        </motion.div>
+                        ))}
                     </div>
                 </section>
                 <section
@@ -380,183 +367,66 @@ export default function Landing() {
                             EXPERIENCE
                         </h1>
                         <div className="flex flex-col">
-                            <motion.div
-                                className="relative flex items-center h-fit w-full px-24 py-4 border-solid border-y border-black/30"
-                                onMouseEnter={() => {
-                                    setWorkLinkHovered(0)
-                                }}
-                                onMouseLeave={() => {
-                                    setWorkLinkHovered(-1)
-                                }}
-                            >
-                                <motion.h1
-                                    className="flex justify-between items-center w-full h-full"
-                                    variants={workLinkVariants}
-                                    animate={
-                                        workLinkHovered == 0
-                                            ? 'hovered'
-                                            : 'default'
-                                    }
-                                >
-                                    AWS
-                                </motion.h1>
-                                <motion.div
-                                    className="relative flex justify-center items-center rounded-sm bg-[#f2f2f2] drop-shadow-2xl z-10"
-                                    variants={workModalVariants}
-                                    animate={
-                                        workLinkHovered == 0
-                                            ? 'visible'
-                                            : 'hidden'
-                                    }
+                            {experienceEntries.map((entry, index) => (
+                                <motion.a
+                                    key={entry.name}
+                                    href={entry.link}
+                                    className={`flex items-center w-full px-24 border-solid border-black/30 cursor-none ${
+                                        index === 0 ? 'border-y' : 'border-b'
+                                    }`}
+                                    animate={{
+                                        paddingTop:
+                                            workLinkHovered === index
+                                                ? '2rem'
+                                                : '1rem',
+                                        paddingBottom:
+                                            workLinkHovered === index
+                                                ? '2rem'
+                                                : '1rem',
+                                    }}
+                                    transition={{
+                                        duration: 0.4,
+                                        ease: [0.25, 0.46, 0.45, 0.94],
+                                    }}
                                     onMouseEnter={() => {
+                                        setWorkLinkHovered(index)
                                         setCursorVariant('link')
                                     }}
                                     onMouseLeave={() => {
+                                        setWorkLinkHovered(-1)
                                         setCursorVariant('defaultDark')
                                     }}
                                 >
-                                    <motion.div
-                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
-                                        whileHover={{
-                                            opacity: 1,
-                                            backdropFilter: 'blur(1px)',
-                                            transition: { duration: 0.2 },
-                                        }}
-                                    >
-                                        <Link
-                                            className="flex w-full h-full justify-center items-center"
-                                            href="https://aws.amazon.com/"
+                                    <div className="w-full flex justify-start">
+                                        <motion.h1
+                                            animate={{
+                                                x:
+                                                    workLinkHovered === index
+                                                        ? '3rem'
+                                                        : '0rem',
+                                                scale:
+                                                    workLinkHovered === index
+                                                        ? 1.12
+                                                        : 1,
+                                                opacity:
+                                                    workLinkHovered === -1
+                                                        ? 1
+                                                        : workLinkHovered ===
+                                                            index
+                                                          ? 1
+                                                          : 0.2,
+                                            }}
+                                            className="font-light origin-center"
+                                            transition={{
+                                                duration: 0.4,
+                                                ease: [0.25, 0.46, 0.45, 0.94],
+                                            }}
                                         >
-                                            <h1 className="p-2">
-                                                Visit Website
-                                            </h1>
-                                        </Link>
-                                    </motion.div>
-                                    <Image
-                                        src={AWSLogo}
-                                        alt="aws image"
-                                        className="w-full px-6 object-cover"
-                                    />
-                                </motion.div>
-                            </motion.div>
-                            <motion.div
-                                className="flex items-center h-fit px-24 py-4 border-solid border-b border-black/30"
-                                onMouseEnter={() => {
-                                    setWorkLinkHovered(1)
-                                }}
-                                onMouseLeave={() => {
-                                    setWorkLinkHovered(-1)
-                                }}
-                            >
-                                <motion.h1
-                                    className="flex items-center w-full h-full"
-                                    variants={workLinkVariants}
-                                    animate={
-                                        workLinkHovered == 1
-                                            ? 'hovered'
-                                            : 'default'
-                                    }
-                                >
-                                    POLARITY
-                                </motion.h1>
-                                <motion.div
-                                    className="relative flex justify-center items-center rounded-sm drop-shadow-2xl z-10"
-                                    variants={workModalVariants}
-                                    animate={
-                                        workLinkHovered == 1
-                                            ? 'visible'
-                                            : 'hidden'
-                                    }
-                                    onMouseEnter={() => {
-                                        setCursorVariant('link')
-                                    }}
-                                    onMouseLeave={() => {
-                                        setCursorVariant('defaultDark')
-                                    }}
-                                >
-                                    <motion.div
-                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
-                                        whileHover={{
-                                            opacity: 1,
-                                            backdropFilter: 'blur(1px)',
-                                            transition: { duration: 0.2 },
-                                        }}
-                                    >
-                                        <Link
-                                            className="flex w-full h-full justify-center items-center"
-                                            href="https://aws.amazon.com/"
-                                        >
-                                            <h1 className="p-2">
-                                                Visit Website
-                                            </h1>
-                                        </Link>
-                                    </motion.div>
-                                    <Image
-                                        src={CryptoWebsite}
-                                        alt="layr image"
-                                        className="h-full object-cover"
-                                    />
-                                </motion.div>
-                            </motion.div>
-                            <motion.div
-                                className="flex items-center h-fit px-24 py-4 border-solid border-b border-black/30"
-                                onMouseEnter={() => {
-                                    setWorkLinkHovered(2)
-                                }}
-                                onMouseLeave={() => {
-                                    setWorkLinkHovered(-1)
-                                }}
-                            >
-                                <motion.h1
-                                    className="flex items-center w-full h-full"
-                                    variants={workLinkVariants}
-                                    animate={
-                                        workLinkHovered == 2
-                                            ? 'hovered'
-                                            : 'default'
-                                    }
-                                >
-                                    KITE
-                                </motion.h1>
-                                <motion.div
-                                    className="relative flex justify-center items-center rounded-sm overflow-hidden bg-[#84868c] drop-shadow-2xl z-10"
-                                    variants={workModalVariants}
-                                    animate={
-                                        workLinkHovered == 2
-                                            ? 'visible'
-                                            : 'hidden'
-                                    }
-                                    onMouseEnter={() => {
-                                        setCursorVariant('link')
-                                    }}
-                                    onMouseLeave={() => {
-                                        setCursorVariant('defaultDark')
-                                    }}
-                                >
-                                    <motion.div
-                                        className="absolute flex justify-center items-center opacity-0 inset-0 text-white text-2xl font-thin bg-black/60"
-                                        whileHover={{
-                                            opacity: 1,
-                                            backdropFilter: 'blur(1px)',
-                                            transition: { duration: 0.2 },
-                                        }}
-                                    >
-                                        <Link
-                                            className="flex w-full h-full justify-center items-center"
-                                            href="https://aws.amazon.com/"
-                                        >
-                                            <h1 className="p-2">
-                                                Visit Website
-                                            </h1>
-                                        </Link>
-                                    </motion.div>
-                                    <Image
-                                        src={KiteLogo}
-                                        alt="bulletin image"
-                                        className="h-full object-cover"
-                                    />
-                                </motion.div>
-                            </motion.div>
+                                            {entry.name}
+                                        </motion.h1>
+                                    </div>
+                                </motion.a>
+                            ))}
                             <div
                                 id="more-work-button-container"
                                 className="flex justify-center w-full pt-16 font-thin tracking-wide text-xl"
@@ -609,7 +479,7 @@ export default function Landing() {
                                         whileHover={{
                                             backgroundColor: '#2d86fa',
                                         }}
-                                        href="https://drive.google.com/file/d/1URQZpYpo839ZNmH_ihf91Q9hQT_Q4cQX/view"
+                                        href="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing"
                                         target="_blank"
                                     >
                                         download cv
