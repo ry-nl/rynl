@@ -4,11 +4,8 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Image from 'next/image'
 
 import ParallaxText from './components/ParallaxText'
-import StickyComponent from './components/StickyComponent'
-import { SlideButtonLightRight, SlideButtonDarkUp } from './components/Buttons'
 import { useCursor } from './components/Cursor'
 import NavSidebar from './components/NavSidebar'
-import { TransitionLink } from './components/PageTransition'
 import { MagneticButton } from './components/MagneticButton'
 
 import PhotoWebsite from '@/public/photoWebsite.jpg'
