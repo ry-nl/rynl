@@ -1,5 +1,6 @@
 'use client'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, Circle } from '@mui/icons-material'
 import { usePageTransition } from './PageTransition'
 import { useCursor } from './Cursor'
@@ -22,6 +23,13 @@ export default function NavSidebar({
 }: NavSidebarProps) {
     const { navigateTo, scrollToTop } = usePageTransition()
     const { setCursorVariant } = useCursor()
+    const [scrolled, setScrolled] = useState(false)
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 80)
+        window.addEventListener('scroll', onScroll, { passive: true })
+        return () => window.removeEventListener('scroll', onScroll)
+    }, [])
 
     return (
         <>
@@ -50,11 +58,13 @@ export default function NavSidebar({
                 <nav className="flex flex-col justify-center gap-12 sm:gap-16 lg:gap-24 w-full h-full p-10 sm:p-16 lg:p-24 text-3xl sm:text-4xl font-thin">
                     {links.map((item) => (
                         <motion.a
+                            layout
                             key={item.label}
                             href={item.href}
                             className="flex gap-4 items-center w-fit cursor-none"
                             onMouseEnter={() => setCursorVariant('link')}
                             onMouseLeave={() => setCursorVariant('default')}
+                            transition={{ layout: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } }}
                             whileHover={{
                                 translateX: 10,
                                 transition: { duration: 0.2 },
@@ -68,23 +78,31 @@ export default function NavSidebar({
                             <Circle sx={{ fontSize: '0.5rem' }} /> {item.label}
                         </motion.a>
                     ))}
-                    <motion.a
-                        href="#"
-                        className="flex gap-4 items-center w-fit cursor-none"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('default')}
-                        whileHover={{
-                            translateX: 10,
-                            transition: { duration: 0.2 },
-                        }}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            setNavModalOpen(false)
-                            scrollToTop()
-                        }}
-                    >
-                        <Circle sx={{ fontSize: '0.5rem' }} /> BACK TO TOP
-                    </motion.a>
+                    <AnimatePresence>
+                        {scrolled && (
+                            <motion.a
+                                href="#"
+                                className="flex gap-4 items-center w-fit cursor-none"
+                                onMouseEnter={() => setCursorVariant('link')}
+                                onMouseLeave={() => setCursorVariant('default')}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 12 }}
+                                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                whileHover={{
+                                    translateX: 10,
+                                    transition: { duration: 0.2 },
+                                }}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    setNavModalOpen(false)
+                                    scrollToTop()
+                                }}
+                            >
+                                <Circle sx={{ fontSize: '0.5rem' }} /> BACK TO TOP
+                            </motion.a>
+                        )}
+                    </AnimatePresence>
                 </nav>
             </motion.div>
 

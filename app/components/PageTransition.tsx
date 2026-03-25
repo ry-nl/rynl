@@ -55,8 +55,8 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
                 window.scrollTo({ top: 0, behavior: 'instant' })
                 targetHref.current = null
             }
-            // Brief delay for the new page to mount, then reveal
-            setTimeout(() => setPhase('revealing'), 150)
+            // Allow new page to mount and settle before revealing
+            setTimeout(() => setPhase('revealing'), 350)
         } else if (phase === 'revealing') {
             setPhase('idle')
         }

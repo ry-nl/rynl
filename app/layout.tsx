@@ -8,6 +8,8 @@ import { Montserrat } from 'next/font/google'
 import { DM_Serif_Display } from 'next/font/google'
 import { TransitionProvider } from './components/PageTransition'
 import { CursorProvider } from './components/Cursor'
+import SplashScreen from './components/SplashScreen'
+import RoutePrefetcher from './components/RoutePrefetcher'
 
 
 const neueMontreal = localFont({
@@ -60,6 +62,8 @@ export default function RootLayout({
                         {children}
                     </TransitionProvider>
                 </CursorProvider>
+                <SplashScreen />
+                <RoutePrefetcher />
             </body>
         </html>
     )

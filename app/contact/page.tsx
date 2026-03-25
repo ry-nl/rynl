@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
+import { MagneticButton } from '../components/MagneticButton'
 import NavSidebar from '../components/NavSidebar'
 import { TransitionLink } from '../components/PageTransition'
 
@@ -193,28 +194,28 @@ export default function Contact() {
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-4 sm:gap-6">
-                            <div
+                            <MagneticButton
                                 onMouseEnter={() => setCursorVariant('link')}
                                 onMouseLeave={() => setCursorVariant('default')}
                             >
                                 <TransitionLink
                                     href="/work"
-                                    className="inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
+                                    className="group inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
                                 >
-                                    View Experience <span>→</span>
+                                    View Experience <span className="inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                                 </TransitionLink>
-                            </div>
-                            <div
+                            </MagneticButton>
+                            <MagneticButton
                                 onMouseEnter={() => setCursorVariant('link')}
                                 onMouseLeave={() => setCursorVariant('default')}
                             >
                                 <TransitionLink
                                     href="/about"
-                                    className="inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
+                                    className="group inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
                                 >
-                                    About Me <span>→</span>
+                                    About Me <span className="inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                                 </TransitionLink>
-                            </div>
+                            </MagneticButton>
                         </div>
                     </div>
                 </div>

@@ -1,12 +1,13 @@
 'use client'
-import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useState, useRef, useCallback } from 'react'
+import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import Image from 'next/image'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
 import NavSidebar from '../components/NavSidebar'
 import { TransitionLink } from '../components/PageTransition'
+import { MagneticButton } from '../components/MagneticButton'
 
 
 const fadeUp = {
@@ -59,6 +60,31 @@ export default function About() {
 
     const heroRef = useRef(null)
 
+    // 3D tilt effect for profile image
+    const tiltX = useMotionValue(0)
+    const tiltY = useMotionValue(0)
+    const springConfig = { damping: 25, stiffness: 180, mass: 0.6 }
+    const smoothTiltX = useSpring(tiltX, springConfig)
+    const smoothTiltY = useSpring(tiltY, springConfig)
+
+    const handleTiltMove = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            const rect = e.currentTarget.getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
+            const x = (e.clientX - centerX) / (rect.width / 2) // -1 to 1
+            const y = (e.clientY - centerY) / (rect.height / 2) // -1 to 1
+            tiltX.set(y * -6) // rotateX: tilt away from mouse vertically
+            tiltY.set(x * 6)  // rotateY: tilt toward mouse horizontally
+        },
+        [tiltX, tiltY]
+    )
+
+    const handleTiltLeave = useCallback(() => {
+        tiltX.set(0)
+        tiltY.set(0)
+    }, [tiltX, tiltY])
+
     const statementRef = useRef(null)
     const statementInView = useInView(statementRef, {
         margin: '0px 0px -150px 0px',
@@ -110,17 +136,28 @@ export default function About() {
                     </span>
                 </nav>
 
-                <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-24">
-                    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 max-w-[1400px] w-full">
-                        {/* Photo */}
+                <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-24 py-6 sm:py-0">
+                    <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-12 lg:gap-24 max-w-[1400px] w-full">
+                        {/* Photo with 3D tilt */}
                         <motion.div
                             className="shrink-0 flex justify-center"
+                            style={{ perspective: 800 }}
                             variants={fadeUp}
                             initial="hidden"
                             animate="visible"
                             custom={0.2}
                         >
-                            <div className="relative w-[280px] h-[350px] sm:w-[340px] sm:h-[420px] lg:w-[420px] lg:h-[520px] overflow-hidden rounded-2xl shadow-2xl">
+                            <motion.div
+                                className="relative w-[220px] h-[275px] sm:w-[340px] sm:h-[420px] lg:w-[420px] lg:h-[520px] overflow-hidden rounded-2xl"
+                                onMouseMove={handleTiltMove}
+                                onMouseLeave={handleTiltLeave}
+                                style={{
+                                    rotateX: smoothTiltX,
+                                    rotateY: smoothTiltY,
+                                    transformStyle: 'preserve-3d',
+                                    boxShadow: '0 30px 60px -10px rgba(0,0,0,0.3), 0 18px 36px -18px rgba(0,0,0,0.25)',
+                                }}
+                            >
                                 <Image
                                     src="/profile.jpg"
                                     alt="Ryan Lee"
@@ -130,7 +167,14 @@ export default function About() {
                                     sizes="(max-width: 640px) 280px, (max-width: 1024px) 340px, 420px"
                                     priority
                                 />
-                            </div>
+                                {/* Glossy reflection overlay that moves with tilt */}
+                                <motion.div
+                                    className="absolute inset-0 pointer-events-none rounded-2xl"
+                                    style={{
+                                        background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
+                                    }}
+                                />
+                            </motion.div>
                         </motion.div>
 
                         {/* Intro text */}
@@ -145,7 +189,7 @@ export default function About() {
                                 Software Engineer &mdash; Los Angeles, CA
                             </motion.p>
                             <motion.h1
-                                className="text-4xl sm:text-5xl lg:text-[5.5rem] font-light leading-[1.05] tracking-tight mb-10"
+                                className="text-4xl sm:text-5xl lg:text-[5.5rem] font-light leading-[1.05] tracking-tight mb-4 sm:mb-10"
                                 variants={fadeUp}
                                 initial="hidden"
                                 animate="visible"
@@ -167,17 +211,17 @@ export default function About() {
                                 on the surface.
                             </motion.p>
                             <motion.div
-                                className="flex gap-6 mt-12"
+                                className="hidden lg:flex gap-6 mt-6 sm:mt-12"
                                 variants={fadeUp}
                                 initial="hidden"
                                 animate="visible"
                                 custom={0.8}
                             >
                                 {[
-                                    { label: 'Resume', icon: '↗', href: 'https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing' },
-                                    { label: 'LinkedIn', icon: '↗', href: 'https://linkedin.com/in/ry-nl' },
-                                ].map(({ label, icon, href }) => (
-                                    <div
+                                    { label: 'Resume', href: 'https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing' },
+                                    { label: 'LinkedIn', href: 'https://linkedin.com/in/ry-nl' },
+                                ].map(({ label, href }) => (
+                                    <MagneticButton
                                         key={label}
                                         onMouseEnter={() => setCursorVariant('link')}
                                         onMouseLeave={() => setCursorVariant('default')}
@@ -185,11 +229,11 @@ export default function About() {
                                         <a
                                             href={href}
                                             target="_blank"
-                                            className="inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
+                                            className="group inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
                                         >
-                                            {label} <span className="text-lg">{icon}</span>
+                                            {label} <span className="text-lg inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                                         </a>
-                                    </div>
+                                    </MagneticButton>
                                 ))}
                             </motion.div>
                         </div>
@@ -312,14 +356,14 @@ export default function About() {
                             {timeline.map((item, index) => (
                                 <div
                                     key={`${item.year}-${index}`}
-                                    className={`flex items-center gap-6 sm:gap-10 lg:gap-16 py-5 sm:py-6 lg:py-8 border-white/15 ${
+                                    className={`group flex items-center gap-6 sm:gap-10 lg:gap-16 py-5 sm:py-6 lg:py-8 border-white/15 px-4 -mx-4 rounded-lg transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.04] hover:shadow-[0_8px_30px_-8px_rgba(255,255,255,0.08)] ${
                                         index === 0 ? 'border-y' : 'border-b'
                                     }`}
                                 >
-                                    <span className="text-3xl sm:text-4xl lg:text-5xl font-light text-white/35 w-20 sm:w-28 lg:w-32 shrink-0">
+                                    <span className="text-3xl sm:text-4xl lg:text-5xl font-light text-white/35 w-20 sm:w-28 lg:w-32 shrink-0 transition-colors duration-300 group-hover:text-white/50">
                                         {item.year}
                                     </span>
-                                    <span className="text-base sm:text-lg lg:text-2xl font-light text-white/85">
+                                    <span className="text-base sm:text-lg lg:text-2xl font-light text-white/85 transition-colors duration-300 group-hover:text-white">
                                         {item.label}
                                     </span>
                                 </div>
@@ -331,29 +375,49 @@ export default function About() {
 
             {/* ═══ FOOTER CTA ═══ */}
             <section className="bg-light">
-                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-12 sm:py-16 lg:py-24 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                    <div
+                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-12 sm:py-16 lg:py-24 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-6">
+                    {/* Resume + LinkedIn — mobile only */}
+                    {[
+                        { label: 'Resume', href: 'https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing' },
+                        { label: 'LinkedIn', href: 'https://linkedin.com/in/ry-nl' },
+                    ].map(({ label, href }) => (
+                        <MagneticButton
+                            key={label}
+                            className="lg:hidden"
+                            onMouseEnter={() => setCursorVariant('link')}
+                            onMouseLeave={() => setCursorVariant('default')}
+                        >
+                            <a
+                                href={href}
+                                target="_blank"
+                                className="group inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
+                            >
+                                {label} <span className="text-lg inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
+                            </a>
+                        </MagneticButton>
+                    ))}
+                    <MagneticButton
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('default')}
                     >
                         <TransitionLink
                             href="/work"
-                            className="inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
+                            className="group inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
                         >
-                            View Experience <span className="text-lg">→</span>
+                            View Experience <span className="text-lg inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                         </TransitionLink>
-                    </div>
-                    <div
+                    </MagneticButton>
+                    <MagneticButton
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('default')}
                     >
                         <TransitionLink
                             href="/contact"
-                            className="inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
+                            className="group inline-flex items-center gap-3 px-8 py-3 border border-black/30 rounded-full text-sm tracking-widest uppercase font-light text-black/70 hover:text-black hover:border-black/60 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 cursor-none"
                         >
-                            Get in Touch <span className="text-lg">→</span>
+                            Get in Touch <span className="text-lg inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                         </TransitionLink>
-                    </div>
+                    </MagneticButton>
                 </div>
             </section>
         </main>

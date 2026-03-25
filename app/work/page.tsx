@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
+import { MagneticButton } from '../components/MagneticButton'
 import NavSidebar from '../components/NavSidebar'
 import { TransitionLink } from '../components/PageTransition'
 
@@ -199,31 +200,31 @@ export default function Work() {
 
             {/* ═══ FOOTER CTA ═══ */}
             <section className="relative bg-dark text-white z-10">
-                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-12 sm:py-16 lg:py-24 flex items-center justify-between">
-                    <div
+                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-12 sm:py-16 lg:py-24 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <MagneticButton
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('default')}
                     >
                         <a
                             href="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing"
                             target="_blank"
-                            className="inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
+                            className="group inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 whitespace-nowrap hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
                         >
-                            Download CV <span>↓</span>
+                            Download CV <span className="inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                         </a>
-                    </div>
-                    <div
+                    </MagneticButton>
+                    <MagneticButton
                         onMouseEnter={() => setCursorVariant('link')}
                         onMouseLeave={() => setCursorVariant('default')}
                     >
                         <a
                             href="https://github.com/ry-nl"
                             target="_blank"
-                            className="inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
+                            className="group inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 whitespace-nowrap hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
                         >
-                            View Projects <span>→</span>
+                            View Projects <span className="inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
                         </a>
-                    </div>
+                    </MagneticButton>
                 </div>
             </section>
             <div className="flex justify-between px-6 py-6 bg-dark text-white/40 tracking-wide font-thin text-sm">
