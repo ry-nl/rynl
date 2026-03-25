@@ -15,7 +15,7 @@ import PhotoWebsite from '@/public/photoWebsite.jpg'
 import TeaWebsite from '@/public/teaWebsite.jpg'
 import ArchWebsite from '@/public/archWebsite.jpg'
 import CryptoWebsite from '@/public/cryptoWebsite.jpg'
-import GalleryWebsite from '@/public/galleryWebsite.jpg'
+import GalleryWebsite from '@/public/galleryWebsite.png'
 import SaasWebsite from '@/public/saasWebsite.png'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
