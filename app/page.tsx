@@ -6,7 +6,9 @@ import Image from 'next/image'
 import ParallaxText from './components/ParallaxText'
 import StickyComponent from './components/StickyComponent'
 import { SlideButtonLightRight, SlideButtonDarkUp } from './components/Buttons'
-import Cursor from './components/Cursor'
+import { useCursor } from './components/Cursor'
+import NavSidebar from './components/NavSidebar'
+import { TransitionLink } from './components/PageTransition'
 
 import PhotoWebsite from '@/public/photoWebsite.jpg'
 import TeaWebsite from '@/public/teaWebsite.jpg'
@@ -15,8 +17,17 @@ import CryptoWebsite from '@/public/cryptoWebsite.jpg'
 import GalleryWebsite from '@/public/galleryWebsite.jpg'
 import SocialWebsite from '@/public/socialWebsite.jpg'
 
-import { Menu, Circle } from '@mui/icons-material'
+import { KeyboardArrowDown } from '@mui/icons-material'
 import { StaticImageData } from 'next/image'
+
+const heroFadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (delay: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.8, delay, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+    }),
+}
 
 interface GalleryImage {
     src: StaticImageData
@@ -63,14 +74,18 @@ function ParallaxGalleryRow({
             style={{ x }}
         >
             {images.map((img) => (
-                <Image
+                <div
                     key={img.alt}
-                    src={img.src}
-                    alt={img.alt}
-                    className="object-cover h-[40vh] shrink-0 p-3"
+                    className="shrink-0 p-3 overflow-hidden gallery-image-wrapper"
                     style={{ backgroundColor: img.bgColor, width: imageWidth }}
-                    sizes={imageWidth}
-                />
+                >
+                    <Image
+                        src={img.src}
+                        alt={img.alt}
+                        className="object-cover h-[40vh] w-full transition-transform duration-500 ease-out hover:scale-105"
+                        sizes={imageWidth}
+                    />
+                </div>
             ))}
         </motion.div>
     )
@@ -79,8 +94,7 @@ function ParallaxGalleryRow({
 const experienceEntries = [
     { name: 'SALESFORCE', link: 'https://www.salesforce.com/' },
     { name: 'AWS', link: 'https://aws.amazon.com/' },
-    { name: 'POLARITY', link: 'https://polarity.io/' },
-    { name: 'KITE', link: 'https://www.kite.com/' },
+    { name: 'POLARITY', link: 'https://www.flashnet.xyz/' },
 ]
 
 export default function Landing() {
@@ -88,11 +102,10 @@ export default function Landing() {
     const videoRef = useRef<HTMLVideoElement>(null)
 
     useEffect(() => {
-        // playback speed
         if (videoRef.current) {
             videoRef.current.playbackRate = 0.5
         }
-    })
+    }, [])
 
     const { scrollYProgress: videoScrollYProgress } = useScroll({
         target: videoRef,
@@ -102,7 +115,7 @@ export default function Landing() {
     const videoY = useTransform(videoScrollYProgress, [0, 1], ['0', '550px'])
 
     // cursor effect
-    const [cursorVariant, setCursorVariant] = useState('defaultLight')
+    const { setCursorVariant } = useCursor()
 
     const ref = useRef(null)
     // nav button and nav menu effect
@@ -116,102 +129,39 @@ export default function Landing() {
 
     // flavor in view effect
     const flavorTextRef = useRef(null)
-
     const flavorTextInView = useInView(flavorTextRef, {
         margin: '0px 0px -200px 0px',
         once: true,
     })
 
+    // experience section in view
+    const experienceRef = useRef(null)
+    const experienceInView = useInView(experienceRef, {
+        margin: '0px 0px -100px 0px',
+        once: true,
+    })
+
+    // footer CTA in view
+    const footerCtaRef = useRef(null)
+    const footerCtaInView = useInView(footerCtaRef, {
+        margin: '0px 0px -150px 0px',
+        once: true,
+    })
+
+    const navLinks = [
+        { label: 'WORK', href: '/work' },
+        { label: 'ABOUT', href: '/about' },
+        { label: 'CONTACT', href: '/contact' },
+    ]
+
     // RENDER
     return (
-        <motion.div ref={ref} className="bg-light font-sans">
-            <Cursor cursorVariant={cursorVariant} />
-            <motion.div
-                id="nav-button"
-                className="fixed flex justify-center items-center top-12 right-12 w-20 h-20 bg-white rounded-full shadow-xl z-20"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{
-                    opacity: heroInView ? 0 : 1,
-                    scale: heroInView ? 0 : 1,
-                }}
-                whileHover={{
-                    scale: 1.1,
-                }}
-                onMouseEnter={() => setCursorVariant('link')}
-                onMouseLeave={() => setCursorVariant('defaultDark')}
-                onClick={() => setNavModalOpen(true)}
-            >
-                <Menu />
-            </motion.div>
-            <motion.div
-                className="fixed top-0 right-0 w-1/3 h-screen bg-dark text-white font-light shadow-2xl z-30"
-                initial={{ x: '100%' }}
-                animate={{
-                    x: navModalOpen ? '0%' : '100%',
-                }}
-                transition={{ ease: 'circOut' }}
-                onMouseEnter={() => setCursorVariant('defaultLight')}
-                onMouseLeave={() => setCursorVariant('defaultDark')}
-            >
-                <nav className="flex flex-col justify-center gap-24 w-full h-full p-24 text-4xl font-thin">
-                    <motion.a
-                        href={'/work'}
-                        className="flex gap-4 items-center w-fit cursor-none"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('defaultLight')}
-                        whileHover={{
-                            translateX: 10,
-                            transition: { duration: 0.2 },
-                        }}
-                    >
-                        <Circle className="w-[8px] h-[8px]" /> WORK
-                    </motion.a>
-                    <motion.a
-                        href={'/about'}
-                        className="flex gap-4 items-center w-fit cursor-none"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('defaultLight')}
-                        whileHover={{
-                            translateX: 10,
-                            transition: { duration: 0.2 },
-                        }}
-                    >
-                        <Circle className="w-[8px] h-[8px]" /> ABOUT
-                    </motion.a>
-                    <motion.a
-                        href={'/contact'}
-                        className="flex gap-4 items-center w-fit cursor-none"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('defaultLight')}
-                        whileHover={{
-                            translateX: 10,
-                            transition: { duration: 0.2 },
-                        }}
-                    >
-                        <Circle className="w-[8px] h-[8px]" /> CONTACT
-                    </motion.a>
-                    <motion.a
-                        href={'/'}
-                        className="flex gap-4 items-center w-fit cursor-none"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('defaultLight')}
-                        whileHover={{
-                            translateX: 10,
-                            transition: { duration: 0.2 },
-                        }}
-                    >
-                        <Circle className="w-[8px] h-[8px]" /> BACK TO TOP
-                    </motion.a>
-                </nav>
-            </motion.div>
-            {navModalOpen && (
-                <motion.div
-                    className="fixed top-0 left-0 w-full h-screen bg-black/30 z-20"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    onClick={() => setNavModalOpen(false)}
-                />
-            )}
+        <motion.div ref={ref} className="bg-light font-sans cursor-none">
+            <NavSidebar
+                navModalOpen={navModalOpen}
+                setNavModalOpen={setNavModalOpen}
+                links={navLinks}
+            />
             <div className="z-10" onClick={() => setNavModalOpen(false)}>
                 <section
                     ref={heroRef}
@@ -229,107 +179,84 @@ export default function Landing() {
                     >
                         <source src="/bg-video-720.mp4" type="video/mp4" />
                     </motion.video>
-                    <nav className="sticky flex justify-between top-0 inset-x-0 h-fit py-4 px-24 text-lg font-thin tracking-widest border-b border-white/50 z-20">
-                        <motion.a
-                            href="/"
-                            className="nav-button"
-                            onMouseEnter={() => {
-                                setCursorVariant('link')
-                            }}
-                            onMouseLeave={() => {
-                                setCursorVariant('defaultLight')
-                            }}
-                        >
-                            HOME
-                        </motion.a>
-                        <motion.a
-                            href="/work"
-                            className="nav-button"
-                            onMouseEnter={() => {
-                                setCursorVariant('link')
-                            }}
-                            onMouseLeave={() => {
-                                setCursorVariant('defaultLight')
-                            }}
-                        >
-                            WORK
-                        </motion.a>
-                        <motion.a
-                            href="/about"
-                            className="nav-button"
-                            onMouseEnter={() => {
-                                setCursorVariant('link')
-                            }}
-                            onMouseLeave={() => {
-                                setCursorVariant('defaultLight')
-                            }}
-                        >
-                            ABOUT
-                        </motion.a>
-                        <motion.a
-                            href="/contact"
-                            className="nav-button"
-                            onMouseEnter={() => {
-                                setCursorVariant('link')
-                            }}
-                            onMouseLeave={() => {
-                                setCursorVariant('defaultLight')
-                            }}
-                        >
-                            CONTACT
-                        </motion.a>
+                    <nav className="absolute top-0 left-0 right-0 flex items-center px-6 sm:px-12 lg:px-24 py-6 font-thin z-20">
+                        <span className="text-sm tracking-[0.2em] text-white/50 uppercase">
+                            Ryan Lee
+                        </span>
+                        <span className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.2em] text-white/35 uppercase">
+                            Portfolio
+                        </span>
                     </nav>
-                    <div className="absolute bottom-0 text-white/20 tracking-tight">
+                    <div className="absolute bottom-16 text-white/20 tracking-tight">
                         <ParallaxText baseVelocity={1}>
                             SOFTWARE DEVELOPER - UI/UX DESIGNER -
                         </ParallaxText>
                     </div>
-                    <div className="absolute left-24 top-1/2 -translate-y-1/2 tracking-wide z-10">
-                        <div className="flex gap-6 items-center font-normal text-8xl">
+                    <div className="absolute left-6 sm:left-12 lg:left-24 top-1/2 -translate-y-1/2 tracking-wide z-10">
+                        <motion.div
+                            className="flex gap-6 items-center font-normal text-5xl sm:text-7xl lg:text-8xl"
+                            variants={heroFadeUp}
+                            initial="hidden"
+                            animate="visible"
+                            custom={0.2}
+                        >
                             <h1>RYAN LEE</h1>
-                        </div>
-                        <div className="font-thin text-3xl pt-6 text-white/70">
+                        </motion.div>
+                        <motion.div
+                            className="font-thin text-xl sm:text-2xl lg:text-3xl pt-6 text-white/70"
+                            variants={heroFadeUp}
+                            initial="hidden"
+                            animate="visible"
+                            custom={0.5}
+                        >
                             SOFTWARE DEVELOPER & UI/UX DESIGNER
-                        </div>
-                        {/* <div className="font-thin text-5xl pt-6 text-white/60">
-                        UI/UX DESIGNER
-                    </div> */}
+                        </motion.div>
                     </div>
-                    <div className="absolute right-24 top-1/2 -translate-y-1/2 font-thin text-2xl text-white/70 z-10 hidden lg:block">
-                        <div className="pb-12">Based in San Francisco, CA</div>
+                    <motion.div
+                        className="absolute right-24 top-1/2 -translate-y-1/2 font-thin text-2xl text-white/70 z-10 hidden lg:block"
+                        variants={heroFadeUp}
+                        initial="hidden"
+                        animate="visible"
+                        custom={0.8}
+                    >
+                        <div className="pb-12">Based in Los Angeles, CA</div>
                         <div>University of Southern California,</div>
                         <div>B.S. Computer Science</div>
-                    </div>
-                    {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-                    <ExpandMore className="w-12 h-12" />
-                </div> */}
+                    </motion.div>
+                    <motion.div
+                        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1.2, duration: 0.8 }}
+                    >
+                        <motion.div
+                            animate={{ y: [0, 6, 0] }}
+                            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                        >
+                            <KeyboardArrowDown sx={{ fontSize: '2rem', color: 'rgba(255,255,255,0.45)' }} />
+                        </motion.div>
+                    </motion.div>
                 </section>
                 <section
                     id="flavor-section-container"
-                    className="relative h-fit px-36 py-12 bg-light z-10"
-                    onMouseEnter={() => setCursorVariant('defaultDark')}
-                    onMouseLeave={() => setCursorVariant('defaultLight')}
+                    className="relative h-fit px-6 sm:px-16 lg:px-36 bg-light z-10"
                 >
-                    <div id="section-content" className="w-full h-full py-36">
+                    <div id="section-content" className="w-full h-full py-32 sm:py-44 lg:py-56">
                         <motion.div
                             ref={flavorTextRef}
                             id="flavor-text"
-                            className="flex justify-between items-center gap-24 font-light"
+                            className="flex flex-col items-center text-center gap-10 font-light"
                             style={{
                                 translateY: flavorTextInView ? '0px' : '50px',
                                 opacity: flavorTextInView ? '1' : '0',
                                 transition: '0.8s',
                             }}
                         >
-                            <h1 className="text-4xl w-3/4 leading-relaxed">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl max-w-[860px] leading-relaxed">
                                 User first, always. I am committed to creating
                                 intuitive front-end experiences and effective
-                                back-end systems. Software solutions that are
-                                both compelling and reliable.
-                            </h1>
-                            <h1 className="text-lg w-1/4 leading-relaxed hidden lg:block">
-                                My passion lies in making products that people
-                                love using and developers enjoy maintaining.
+                                back-end systems — software solutions that are
+                                as compelling as they are reliable.
                             </h1>
                         </motion.div>
                     </div>
@@ -337,12 +264,10 @@ export default function Landing() {
                 <section
                     id="work-section-container"
                     className="relative h-fit bg-light z-10"
-                    onMouseEnter={() => setCursorVariant('defaultDark')}
-                    onMouseLeave={() => setCursorVariant('defaultLight')}
                 >
                     <div
                         id="section-content"
-                        className="flex-col justify-center items-center w-screen text-6xl font-light py-12"
+                        className="flex-col justify-center items-center w-screen text-6xl font-light py-8 sm:py-12 lg:py-16"
                     >
                         {galleryRows.map((images, index) => (
                             <ParallaxGalleryRow
@@ -355,89 +280,75 @@ export default function Landing() {
                 </section>
                 <section
                     id="recent-work-section-container"
-                    className="w-full py-36 pb-60 bg-light z-10"
-                    onMouseEnter={() => setCursorVariant('defaultDark')}
-                    onMouseLeave={() => setCursorVariant('defaultLight')}
+                    className="w-full py-24 sm:py-32 lg:py-44 pb-24 sm:pb-36 lg:pb-60 bg-light z-10"
                 >
-                    <div
-                        id="section-content"
-                        className="w-full h-full px-24 text-7xl font-light tracking-wide"
+                    <motion.div
+                        ref={experienceRef}
+                        className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24"
+                        style={{
+                            translateY: experienceInView ? '0px' : '40px',
+                            opacity: experienceInView ? '1' : '0',
+                            transition: '0.8s',
+                        }}
                     >
-                        <h1 className="text-lg pl-24 pb-8 tracking-normal text-black/50">
-                            EXPERIENCE
-                        </h1>
-                        <div className="flex flex-col">
+                        <p className="text-sm tracking-[0.25em] uppercase text-black/50 mb-20">
+                            Experience
+                        </p>
+                        <div>
                             {experienceEntries.map((entry, index) => (
-                                <motion.a
+                                <a
                                     key={entry.name}
                                     href={entry.link}
-                                    className={`flex items-center w-full px-24 border-solid border-black/30 cursor-none ${
+                                    target="_blank"
+                                    className={`flex items-center justify-between py-8 border-black/15 cursor-none ${
                                         index === 0 ? 'border-y' : 'border-b'
                                     }`}
-                                    animate={{
-                                        paddingTop:
-                                            workLinkHovered === index
-                                                ? '2rem'
-                                                : '1rem',
-                                        paddingBottom:
-                                            workLinkHovered === index
-                                                ? '2rem'
-                                                : '1rem',
-                                    }}
-                                    transition={{
-                                        duration: 0.4,
-                                        ease: [0.25, 0.46, 0.45, 0.94],
-                                    }}
                                     onMouseEnter={() => {
                                         setWorkLinkHovered(index)
                                         setCursorVariant('link')
                                     }}
                                     onMouseLeave={() => {
                                         setWorkLinkHovered(-1)
-                                        setCursorVariant('defaultDark')
+                                        setCursorVariant('default')
                                     }}
                                 >
-                                    <div className="w-full flex justify-start">
-                                        <motion.h1
-                                            animate={{
-                                                x:
-                                                    workLinkHovered === index
-                                                        ? '3rem'
-                                                        : '0rem',
-                                                scale:
-                                                    workLinkHovered === index
-                                                        ? 1.12
-                                                        : 1,
-                                                opacity:
-                                                    workLinkHovered === -1
-                                                        ? 1
-                                                        : workLinkHovered ===
-                                                            index
-                                                          ? 1
-                                                          : 0.2,
-                                            }}
-                                            className="font-light origin-center"
-                                            transition={{
-                                                duration: 0.4,
-                                                ease: [0.25, 0.46, 0.45, 0.94],
-                                            }}
-                                        >
-                                            {entry.name}
-                                        </motion.h1>
-                                    </div>
-                                </motion.a>
+                                    <motion.h2
+                                        className="text-3xl sm:text-4xl lg:text-6xl font-light tracking-tight"
+                                        animate={{
+                                            x: workLinkHovered === index ? '1.5rem' : '0rem',
+                                            opacity:
+                                                workLinkHovered === -1
+                                                    ? 1
+                                                    : workLinkHovered === index
+                                                      ? 1
+                                                      : 0.25,
+                                        }}
+                                        transition={{
+                                            duration: 0.4,
+                                            ease: [0.25, 0.46, 0.45, 0.94],
+                                        }}
+                                    >
+                                        {entry.name}
+                                    </motion.h2>
+                                    <motion.span
+                                        className="text-2xl font-light text-black/30"
+                                        animate={{
+                                            opacity: workLinkHovered === index ? 1 : 0,
+                                            x: workLinkHovered === index ? '0rem' : '-1rem',
+                                        }}
+                                        transition={{
+                                            duration: 0.3,
+                                            ease: [0.25, 0.46, 0.45, 0.94],
+                                        }}
+                                    >
+                                        ↗
+                                    </motion.span>
+                                </a>
                             ))}
-                            <div
-                                id="more-work-button-container"
-                                className="flex justify-center w-full pt-16 font-thin tracking-wide text-xl"
-                            >
+                            <div className="flex justify-center w-full pt-16 font-thin tracking-wide text-xl">
                                 <div
-                                    onMouseEnter={() => {
-                                        setCursorVariant('link')
-                                    }}
-                                    onMouseLeave={() => {
-                                        setCursorVariant('defaultDark')
-                                    }}
+                                    onMouseEnter={() => setCursorVariant('link')}
+                                    onMouseLeave={() => setCursorVariant('default')}
                                 >
                                     <SlideButtonLightRight
                                         buttonText="MORE WORK"
@@ -447,29 +358,38 @@ export default function Landing() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </section>
                 <section
                     id="info-section-container"
                     className="relative flex justify-between h-screen bg-dark"
-                    onMouseEnter={() => {
-                        setCursorVariant('defaultLight')
-                    }}
-                    onMouseLeave={() => {
-                        setCursorVariant('defaultDark')
-                    }}
                 >
-                    <div
+                    <motion.div
+                        ref={footerCtaRef}
                         id="section-content"
-                        className="flex flex-col justify-center w-full h-full text-white px-36"
+                        className="flex flex-col justify-center w-full h-full text-white px-6 sm:px-16 lg:px-36"
                     >
-                        <div className="text-white font-thin pb-24 border-b">
-                            <h1 className="pb-8 text-3xl text-white/70">
+                        <div className="text-white font-thin pb-12 sm:pb-16 lg:pb-24 border-b">
+                            <motion.h1
+                                className="pb-8 text-xl sm:text-2xl lg:text-3xl text-white/70"
+                                style={{
+                                    translateY: footerCtaInView ? '0px' : '30px',
+                                    opacity: footerCtaInView ? '1' : '0',
+                                    transition: '0.8s',
+                                }}
+                            >
                                 Thanks for stopping by!
-                            </h1>
-                            <h1 className="text-7xl font-light">
+                            </motion.h1>
+                            <motion.h1
+                                className="text-4xl sm:text-5xl lg:text-7xl font-light"
+                                style={{
+                                    translateY: footerCtaInView ? '0px' : '30px',
+                                    opacity: footerCtaInView ? '1' : '0',
+                                    transition: '0.8s 0.2s',
+                                }}
+                            >
                                 Let&apos;s Make Great Things.
-                            </h1>
+                            </motion.h1>
                         </div>
                         <div className="relative flex justify-end items-center text-black font-thin text-xl drop-shadow-2xl z-20">
                             <div className="absolute pr-24">
@@ -481,6 +401,8 @@ export default function Landing() {
                                         }}
                                         href="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing"
                                         target="_blank"
+                                        onMouseEnter={() => setCursorVariant('link')}
+                                        onMouseLeave={() => setCursorVariant('default')}
                                     >
                                         download cv
                                     </motion.a>
@@ -488,18 +410,14 @@ export default function Landing() {
                             </div>
                         </div>
                         <div className="text-white text-4xl font-light pt-24">
-                            <div className="flex gap-8">
+                            <div className="flex flex-wrap gap-4 sm:gap-8">
                                 <div
                                     id="github-button-container"
                                     className="flex shrink-0 font-thin tracking-wide text-xl"
                                 >
                                     <div
-                                        onMouseEnter={() => {
-                                            setCursorVariant('link')
-                                        }}
-                                        onMouseLeave={() => {
-                                            setCursorVariant('defaultLight')
-                                        }}
+                                        onMouseEnter={() => setCursorVariant('link')}
+                                        onMouseLeave={() => setCursorVariant('default')}
                                     >
                                         <SlideButtonDarkUp
                                             buttonText="Github"
@@ -513,12 +431,8 @@ export default function Landing() {
                                     className="flex shrink-0 font-thin tracking-wide text-xl"
                                 >
                                     <div
-                                        onMouseEnter={() => {
-                                            setCursorVariant('link')
-                                        }}
-                                        onMouseLeave={() => {
-                                            setCursorVariant('defaultLight')
-                                        }}
+                                        onMouseEnter={() => setCursorVariant('link')}
+                                        onMouseLeave={() => setCursorVariant('default')}
                                     >
                                         <SlideButtonDarkUp
                                             buttonText="LinkedIn"
@@ -532,12 +446,8 @@ export default function Landing() {
                                     className="flex shrink-0 font-thin tracking-wide text-xl"
                                 >
                                     <div
-                                        onMouseEnter={() => {
-                                            setCursorVariant('link')
-                                        }}
-                                        onMouseLeave={() => {
-                                            setCursorVariant('defaultLight')
-                                        }}
+                                        onMouseEnter={() => setCursorVariant('link')}
+                                        onMouseLeave={() => setCursorVariant('default')}
                                     >
                                         <SlideButtonDarkUp
                                             buttonText="rynldev@gmail.com"
@@ -551,12 +461,8 @@ export default function Landing() {
                                     className="flex shrink-0 font-thin tracking-wide text-xl"
                                 >
                                     <div
-                                        onMouseEnter={() => {
-                                            setCursorVariant('link')
-                                        }}
-                                        onMouseLeave={() => {
-                                            setCursorVariant('defaultLight')
-                                        }}
+                                        onMouseEnter={() => setCursorVariant('link')}
+                                        onMouseLeave={() => setCursorVariant('default')}
                                     >
                                         <SlideButtonDarkUp
                                             buttonText="+1 702 626 3161"
@@ -567,13 +473,13 @@ export default function Landing() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                     <div className="absolute flex justify-between bottom-0 p-6 w-full text-white/50 tracking-wide font-thin">
-                        <h1>Based in San Francisco, CA</h1>
-                        <h1 className="hidden lg:block">
+                        <h1 className="text-xs sm:text-sm">Based in Los Angeles, CA</h1>
+                        <h1 className="hidden lg:block text-xs sm:text-sm">
                             Built with Next.js, Tailwind CSS, and Framer Motion
                         </h1>
-                        <h1>© 2025 Ryan Lee - All Rights Reserved</h1>
+                        <h1 className="text-xs sm:text-sm">© 2026 Ryan Lee - All Rights Reserved</h1>
                     </div>
                 </section>
             </div>

@@ -38,31 +38,6 @@ body::-webkit-scrollbar {
     scrollbar-width: none; /* Firefox */
 }
 
-.cursor {
-    z-index: 999;
-    background-color: #eeeeee;
-    opacity: 60%;
-    height: 24px;
-    width: 24px;
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-
-.small-cursor {
-    z-index: 999;
-    background-color: #eeeeee;
-    opacity: 80%;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
 
 .hero-text {
     width: fit-content;
@@ -100,33 +75,3 @@ body::-webkit-scrollbar {
     transition: 0.7s;
 }
 
-.nav-button {
-    position: relative;
-    font-size: 1.125rem;
-    padding: 0px 2px 6px 2px;
-    letter-spacing: 0.1em;
-    transition: letter-spacing 0.3s ease, opacity 0.3s ease;
-}
-
-.nav-button:hover {
-    letter-spacing: 0.18em;
-    opacity: 0.75;
-}
-
-.nav-button::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.8);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.nav-button:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}

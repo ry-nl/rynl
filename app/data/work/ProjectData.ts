@@ -43,7 +43,7 @@ export const ExperienceData: ExperienceItem[] = [
         ],
     },
     {
-        company: 'Pepper Labs',
+        company: 'Polarity',
         role: 'Back-End Software Development Engineer',
         dates: 'Jul 2022 — Feb 2023',
         technologies: ['TypeScript', 'Swift', 'React Native', 'GraphQL', 'Apollo', 'MongoDB'],

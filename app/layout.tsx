@@ -6,6 +6,8 @@ import { Figtree } from 'next/font/google'
 import { DM_Sans } from 'next/font/google'
 import { Montserrat } from 'next/font/google'
 import { DM_Serif_Display } from 'next/font/google'
+import { TransitionProvider } from './components/PageTransition'
+import { CursorProvider } from './components/Cursor'
 
 
 const neueMontreal = localFont({
@@ -53,8 +55,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${neueMontreal.variable} ${dmSerif.variable}`}>
-                {/* <Navbar /> */}
-                {children}
+                <CursorProvider>
+                    <TransitionProvider>
+                        {children}
+                    </TransitionProvider>
+                </CursorProvider>
             </body>
         </html>
     )

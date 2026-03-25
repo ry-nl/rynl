@@ -2,10 +2,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 
-import { Menu, Circle } from '@mui/icons-material'
-
-import Cursor from '../components/Cursor'
-import { SlideButtonDarkUp } from '../components/Buttons'
+import { KeyboardArrowDown } from '@mui/icons-material'
+import { useCursor } from '../components/Cursor'
+import NavSidebar from '../components/NavSidebar'
+import { TransitionLink } from '../components/PageTransition'
 
 import {
     ExperienceData,
@@ -20,10 +20,10 @@ export default function Work() {
         if (videoRef.current) {
             videoRef.current.playbackRate = 0.4
         }
-    })
+    }, [])
 
     const [navModalOpen, setNavModalOpen] = useState(false)
-    const [cursorVariant, setCursorVariant] = useState('defaultLight')
+    const { setCursorVariant } = useCursor()
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
 
     const heroRef = useRef(null)
@@ -35,9 +35,7 @@ export default function Work() {
     const heroY = useTransform(heroScroll, [0, 1], ['0%', '30%'])
 
     return (
-        <main className="relative min-h-screen text-dark font-sans">
-            <Cursor cursorVariant={cursorVariant} />
-
+        <main className="relative min-h-screen text-dark font-sans cursor-none">
             {/* Background video — fixed, dark, behind everything */}
             <video
                 ref={videoRef}
@@ -53,65 +51,38 @@ export default function Work() {
                 />
             </video>
 
-            {/* Nav button */}
-            <motion.div
-                className="fixed flex justify-center items-center top-12 right-12 w-20 h-20 bg-white rounded-full shadow-xl z-50 cursor-none"
-                whileHover={{ scale: 1.1 }}
-                onMouseEnter={() => setCursorVariant('link')}
-                onMouseLeave={() => setCursorVariant('defaultLight')}
-                onClick={() => setNavModalOpen(true)}
-            >
-                <Menu className="text-black" />
-            </motion.div>
-
-            {/* Nav modal */}
-            <motion.div
-                className="fixed top-0 right-0 w-1/3 h-screen bg-dark text-white font-light shadow-2xl z-50"
-                initial={{ x: '100%' }}
-                animate={{ x: navModalOpen ? '0%' : '100%' }}
-                transition={{ ease: 'circOut' }}
-                onMouseEnter={() => setCursorVariant('defaultLight')}
-                onMouseLeave={() => setCursorVariant('defaultDark')}
-            >
-                <nav className="flex flex-col justify-center gap-24 w-full h-full p-24 text-4xl font-thin">
-                    {[
-                        { label: 'HOME', href: '/' },
-                        { label: 'ABOUT', href: '/about' },
-                        { label: 'CONTACT', href: '/contact' },
-                    ].map((item) => (
-                        <motion.a
-                            key={item.label}
-                            href={item.href}
-                            className="flex gap-4 items-center w-fit cursor-none"
-                            onMouseEnter={() => setCursorVariant('link')}
-                            onMouseLeave={() => setCursorVariant('defaultLight')}
-                            whileHover={{
-                                translateX: 10,
-                                transition: { duration: 0.2 },
-                            }}
-                        >
-                            <Circle className="w-[8px] h-[8px]" /> {item.label}
-                        </motion.a>
-                    ))}
-                </nav>
-            </motion.div>
-            {navModalOpen && (
-                <motion.div
-                    className="fixed top-0 left-0 w-full h-screen bg-black/30 z-40"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    onClick={() => setNavModalOpen(false)}
-                />
-            )}
+            <NavSidebar
+                navModalOpen={navModalOpen}
+                setNavModalOpen={setNavModalOpen}
+                links={[
+                    { label: 'HOME', href: '/' },
+                    { label: 'ABOUT', href: '/about' },
+                    { label: 'CONTACT', href: '/contact' },
+                ]}
+            />
 
             {/* ═══ HERO ═══ */}
             <motion.section
                 ref={heroRef}
-                className="relative flex flex-col justify-end h-screen px-24 pb-32 text-white"
+                className="relative flex flex-col h-screen px-6 sm:px-12 lg:px-24 pb-16 sm:pb-24 lg:pb-32 text-white"
                 style={{ opacity: heroOpacity, y: heroY }}
                 onClick={() => setNavModalOpen(false)}
             >
-                <h1 className="text-[8rem] font-light leading-none tracking-tight">
+                <nav className="relative flex items-center py-6 text-lg font-thin tracking-widest text-white/70">
+                    <TransitionLink
+                        href="/"
+                        className="cursor-none hover:text-white transition-colors duration-200"
+                        onMouseEnter={() => setCursorVariant('link')}
+                        onMouseLeave={() => setCursorVariant('default')}
+                    >
+                        ← BACK
+                    </TransitionLink>
+                    <span className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.2em] text-white/40 uppercase">
+                        Work
+                    </span>
+                </nav>
+                <div className="flex-1 flex flex-col justify-end">
+                <h1 className="text-5xl sm:text-7xl lg:text-[8rem] font-light leading-none tracking-tight">
                     EXPERIENCE
                 </h1>
                 <div className="flex items-center gap-8 mt-8">
@@ -120,15 +91,30 @@ export default function Work() {
                         {EducationData.school} &mdash; {EducationData.degree}
                     </p>
                 </div>
+                </div>
+
+                {/* Scroll indicator */}
+                <motion.div
+                    className="absolute bottom-6 left-1/2 -translate-x-1/2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2, duration: 0.8 }}
+                >
+                    <motion.div
+                        animate={{ y: [0, 6, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                    >
+                        <KeyboardArrowDown sx={{ fontSize: '2rem', color: 'rgba(255,255,255,0.45)' }} />
+                    </motion.div>
+                </motion.div>
             </motion.section>
 
             {/* ═══ EXPERIENCE TIMELINE ═══ */}
             <section
                 className="relative bg-light z-10"
                 onClick={() => setNavModalOpen(false)}
-                onMouseEnter={() => setCursorVariant('defaultDark')}
             >
-                <div className="max-w-[1400px] mx-auto px-24 py-36">
+                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-16 sm:py-24 lg:py-36">
                     {ExperienceData.map((entry, index) => (
                         <ExperienceRow
                             key={`${entry.company}-${entry.role}`}
@@ -141,7 +127,6 @@ export default function Work() {
                                     expandedIndex === index ? null : index
                                 )
                             }
-                            setCursorVariant={setCursorVariant}
                         />
                     ))}
                 </div>
@@ -151,14 +136,13 @@ export default function Work() {
             <section
                 className="relative bg-dark text-white z-10"
                 onClick={() => setNavModalOpen(false)}
-                onMouseEnter={() => setCursorVariant('defaultLight')}
             >
-                <div className="max-w-[1400px] mx-auto px-24 py-36">
+                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-16 sm:py-24 lg:py-36">
                     <h2 className="text-lg tracking-widest text-white/40 uppercase mb-20">
                         Skills &amp; Technologies
                     </h2>
 
-                    <div className="grid grid-cols-2 gap-y-16 gap-x-24">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-12 sm:gap-y-16 gap-x-12 lg:gap-x-24">
                         <SkillGroup
                             label="Languages"
                             items={SkillsData.languages}
@@ -187,18 +171,17 @@ export default function Work() {
             <section
                 className="relative bg-light z-10"
                 onClick={() => setNavModalOpen(false)}
-                onMouseEnter={() => setCursorVariant('defaultDark')}
             >
-                <div className="max-w-[1400px] mx-auto px-24 py-36">
+                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-16 sm:py-24 lg:py-36">
                     <h2 className="text-lg tracking-widest text-black/40 uppercase mb-20">
                         Education
                     </h2>
-                    <div className="flex justify-between items-end border-t border-black/15 pt-12">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-6 border-t border-black/15 pt-12">
                         <div>
-                            <h3 className="text-5xl font-light tracking-tight">
+                            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight">
                                 {EducationData.school}
                             </h3>
-                            <p className="text-2xl font-light text-black/50 mt-4">
+                            <p className="text-xl sm:text-2xl font-light text-black/50 mt-4">
                                 {EducationData.degree}
                             </p>
                         </div>
@@ -215,35 +198,41 @@ export default function Work() {
             </section>
 
             {/* ═══ FOOTER CTA ═══ */}
-            <section
-                className="relative bg-dark text-white z-10"
-                onMouseEnter={() => setCursorVariant('defaultLight')}
-            >
-                <div className="max-w-[1400px] mx-auto px-24 py-24 flex items-center justify-between">
+            <section className="relative bg-dark text-white z-10">
+                <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24 py-12 sm:py-16 lg:py-24 flex items-center justify-between">
                     <div
-                        className="flex shrink-0 font-thin tracking-wide text-xl"
                         onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('defaultLight')}
+                        onMouseLeave={() => setCursorVariant('default')}
                     >
-                        <SlideButtonDarkUp
-                            buttonText="Download CV"
-                            link="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing"
-                            popupText="↓"
-                        />
+                        <a
+                            href="https://drive.google.com/file/d/1bL7hY_9-d8hVv4b2j8vsFqLUBJP8bH8K/view?usp=sharing"
+                            target="_blank"
+                            className="inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
+                        >
+                            Download CV <span>↓</span>
+                        </a>
                     </div>
                     <div
-                        className="flex shrink-0 font-thin tracking-wide text-xl"
                         onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('defaultLight')}
+                        onMouseLeave={() => setCursorVariant('default')}
                     >
-                        <SlideButtonDarkUp
-                            buttonText="View Projects"
-                            link="https://github.com/ry-nl"
-                            popupText="→"
-                        />
+                        <a
+                            href="https://github.com/ry-nl"
+                            target="_blank"
+                            className="inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none"
+                        >
+                            View Projects <span>→</span>
+                        </a>
                     </div>
                 </div>
             </section>
+            <div className="flex justify-between px-6 py-6 bg-dark text-white/40 tracking-wide font-thin text-sm">
+                <span className="text-xs sm:text-sm">Based in Los Angeles, CA</span>
+                <span className="hidden lg:block text-xs sm:text-sm">
+                    Built with Next.js, Tailwind CSS, and Framer Motion
+                </span>
+                <span className="text-xs sm:text-sm">© 2026 Ryan Lee - All Rights Reserved</span>
+            </div>
         </main>
     )
 }
@@ -258,16 +247,15 @@ function ExperienceRow({
     isExpanded,
     isAnyExpanded,
     onToggle,
-    setCursorVariant,
 }: {
     entry: (typeof ExperienceData)[number]
     index: number
     isExpanded: boolean
     isAnyExpanded: boolean
     onToggle: () => void
-    setCursorVariant: (v: string) => void
 }) {
     const [isHovered, setIsHovered] = useState(false)
+    const { setCursorVariant } = useCursor()
 
     return (
         <motion.div
@@ -279,7 +267,7 @@ function ExperienceRow({
             }}
             onMouseLeave={() => {
                 setIsHovered(false)
-                setCursorVariant('defaultDark')
+                setCursorVariant('default')
             }}
         >
             {/* Header row */}
@@ -293,7 +281,7 @@ function ExperienceRow({
             >
                 <div className="flex items-baseline gap-6">
                     <motion.h2
-                        className="text-6xl font-light tracking-tight"
+                        className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight"
                         animate={{
                             x: isHovered || isExpanded ? '1.5rem' : '0rem',
                             opacity:
@@ -356,7 +344,7 @@ function ExperienceRow({
                         className="overflow-hidden"
                     >
                         <div className="pb-10 pl-6">
-                            <p className="text-2xl font-light text-black/60 mb-2">
+                            <p className="text-xl sm:text-2xl font-light text-black/60 mb-2">
                                 {entry.role}
                             </p>
                             <div className="flex flex-wrap gap-3 mb-8">
@@ -410,7 +398,7 @@ function SkillGroup({ label, items }: { label: string; items: string[] }) {
                 {items.map((item) => (
                     <span
                         key={item}
-                        className="px-4 py-1.5 text-sm tracking-wider border border-white/15 rounded-full text-white/70"
+                        className="px-4 py-1.5 text-sm tracking-wider border border-white/15 rounded-full text-white/70 transition-all duration-300 hover:border-white/40 hover:text-white hover:bg-white/[0.06]"
                     >
                         {item}
                     </span>

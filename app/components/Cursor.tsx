@@ -1,84 +1,95 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+'use client'
+import {
+    createContext,
+    useContext,
+    useState,
+    useMemo,
+    useEffect,
+    ReactNode,
+} from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 
-export default function Cursor({ cursorVariant }: { cursorVariant: string }) {
-    const [mousePosition, setMousePosition] = useState({
-        x: 0,
-        y: 0,
-    })
+type CursorVariant = 'default' | 'link'
+
+interface CursorContextType {
+    setCursorVariant: (variant: CursorVariant) => void
+}
+
+const CursorContext = createContext<CursorContextType>({
+    setCursorVariant: () => {},
+})
+
+export function useCursor() {
+    return useContext(CursorContext)
+}
+
+export function CursorProvider({ children }: { children: ReactNode }) {
+    const [variant, setVariant] = useState<CursorVariant>('default')
+    const mouseX = useMotionValue(-100)
+    const mouseY = useMotionValue(-100)
+    const [visible, setVisible] = useState(false)
+
+    // Trailing cursor springs — lower damping/mass so it follows more closely
+    const springConfig = { damping: 22, stiffness: 400, mass: 0.15 }
+    const trailX = useSpring(mouseX, springConfig)
+    const trailY = useSpring(mouseY, springConfig)
+
+    const contextValue = useMemo(
+        () => ({ setCursorVariant: setVariant }),
+        [setVariant]
+    )
 
     useEffect(() => {
-        const mouseMove = (e: any) => {
-            setMousePosition({
-                x: e.clientX,
-                y: e.clientY,
-            })
+        const onMouseMove = (e: MouseEvent) => {
+            mouseX.set(e.clientX)
+            mouseY.set(e.clientY)
+            if (!visible) setVisible(true)
         }
+        window.addEventListener('mousemove', onMouseMove)
+        return () => window.removeEventListener('mousemove', onMouseMove)
+    }, [mouseX, mouseY, visible])
 
-        window.addEventListener('mousemove', mouseMove)
-
-        return () => {
-            window.removeEventListener('mousemove', mouseMove)
-        }
-    }, [])
-
-    const cursorVariants = {
-        defaultLight: {
-            x: mousePosition.x - 12,
-            y: mousePosition.y - 12,
-        },
-        defaultDark: {
-            x: mousePosition.x - 12,
-            y: mousePosition.y - 12,
-            backgroundColor: '#111111',
-        },
-        link: {
-            x: mousePosition.x - 16,
-            y: mousePosition.y - 16,
-            width: 32,
-            height: 32,
-            backgroundColor: '#2d86fa',
-        },
-    }
-
-    const smallCursorVariants = {
-        defaultLight: {
-            x: mousePosition.x - 8,
-            y: mousePosition.y - 8,
-        },
-        defaultDark: {
-            x: mousePosition.x - 8,
-            y: mousePosition.y - 8,
-            backgroundColor: '#111111',
-        },
-        link: {
-            x: mousePosition.x - 12,
-            y: mousePosition.y - 12,
-            width: 24,
-            height: 24,
-            backgroundColor: '#2d86fa',
-        },
-    }
+    const isLink = variant === 'link'
 
     return (
-        <motion.div>
+        <CursorContext.Provider value={contextValue}>
+            {children}
+            {/* Main cursor — instant, blend mode for auto contrast */}
             <motion.div
-                className="cursor"
-                variants={cursorVariants}
-                animate={cursorVariant}
-                transition={{
-                    duration: 0,
+                className="fixed rounded-full pointer-events-none z-[999]"
+                style={{
+                    left: mouseX,
+                    top: mouseY,
+                    x: '-50%',
+                    y: '-50%',
+                    mixBlendMode: isLink ? 'normal' : 'difference',
+                    opacity: visible ? 0.82 : 0,
                 }}
+                animate={{
+                    width: isLink ? 32 : 20,
+                    height: isLink ? 32 : 20,
+                    backgroundColor: isLink ? '#2d86fa' : '#ffffff',
+                }}
+                transition={{ type: 'tween', duration: 0.15 }}
             />
+            {/* Trailing cursor — springs behind, decorative */}
             <motion.div
-                className="small-cursor flex justify-center items-center"
-                variants={smallCursorVariants}
-                animate={cursorVariant}
-                transition={{
-                    duration: 0.1,
-                    ease: 'easeOut',
+                className="fixed rounded-full pointer-events-none z-[999]"
+                style={{
+                    left: trailX,
+                    top: trailY,
+                    x: '-50%',
+                    y: '-50%',
+                    mixBlendMode: isLink ? 'normal' : 'difference',
+                    opacity: visible ? 0.65 : 0,
                 }}
+                animate={{
+                    width: isLink ? 20 : 12,
+                    height: isLink ? 20 : 12,
+                    backgroundColor: isLink ? '#2d86fa' : '#ffffff',
+                }}
+                transition={{ type: 'tween', duration: 0.15 }}
             />
-        </motion.div>
+        </CursorContext.Provider>
     )
 }
