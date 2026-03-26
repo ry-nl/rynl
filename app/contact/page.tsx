@@ -5,8 +5,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
 import { MagneticButton } from '../components/MagneticButton'
-import NavSidebar from '../components/NavSidebar'
-import { TransitionLink } from '../components/PageTransition'
+import { TransitionLink, usePageTransition } from '../components/PageTransition'
 
 const fadeUp = {
     hidden: { opacity: 0, y: 30 },
@@ -53,10 +52,32 @@ function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | '
     const [status, setStatus] = useState<FormStatus>('idle')
     const [errorMsg, setErrorMsg] = useState('')
     const [focusedField, setFocusedField] = useState<string | null>(null)
+    const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const NAME_RE = /^[a-zA-ZÀ-ÖØ-öø-ÿ' -]{2,}$/
+
+    const errors = {
+        name: touched.name && !NAME_RE.test(name.trim())
+            ? name.trim().length === 0 ? 'Name is required.' : 'Enter a valid name.'
+            : null,
+        email: touched.email && !EMAIL_RE.test(email.trim())
+            ? email.trim().length === 0 ? 'Email is required.' : 'Enter a valid email address.'
+            : null,
+        message: touched.message && message.trim().length < 30
+            ? message.trim().length === 0 ? 'Message is required.' : `At least 30 characters (${message.trim().length}/30).`
+            : null,
+    }
+
+    const isValid =
+        NAME_RE.test(name.trim()) &&
+        EMAIL_RE.test(email.trim()) &&
+        message.trim().length >= 30
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!name.trim() || !email.trim() || !message.trim()) return
+        setTouched({ name: true, email: true, message: true })
+        if (!isValid) return
 
         setStatus('submitting')
         setErrorMsg('')
@@ -87,8 +108,9 @@ function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | '
         }
     }
 
-    const inputClasses = (field: string) =>
+    const inputClasses = (field: 'name' | 'email' | 'message') =>
         `w-full bg-transparent border-b ${
+            errors[field] ? 'border-red-400/60' :
             focusedField === field ? 'border-white/60' : 'border-white/15'
         } py-3 text-white font-light text-base sm:text-lg outline-none transition-all duration-500 placeholder:text-white/25 focus:placeholder:text-white/40 cursor-none`
 
@@ -110,12 +132,24 @@ function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | '
                     type="text"
                     placeholder="Your name"
                     value={name}
+                    maxLength={50}
                     onChange={(e) => setName(e.target.value)}
                     onFocus={() => setFocusedField('name')}
-                    onBlur={() => setFocusedField(null)}
+                    onBlur={() => { setFocusedField(null); setTouched(t => ({ ...t, name: true })) }}
                     className={inputClasses('name')}
                     disabled={status === 'submitting'}
                 />
+                <AnimatePresence>
+                    {errors.name && (
+                        <motion.p
+                            className="text-xs text-red-400/70 font-light mt-1.5"
+                            initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            {errors.name}
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </div>
 
             <div className="relative">
@@ -134,12 +168,24 @@ function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | '
                     type="email"
                     placeholder="Your email"
                     value={email}
+                    maxLength={50}
                     onChange={(e) => setEmail(e.target.value)}
                     onFocus={() => setFocusedField('email')}
-                    onBlur={() => setFocusedField(null)}
+                    onBlur={() => { setFocusedField(null); setTouched(t => ({ ...t, email: true })) }}
                     className={inputClasses('email')}
                     disabled={status === 'submitting'}
                 />
+                <AnimatePresence>
+                    {errors.email && (
+                        <motion.p
+                            className="text-xs text-red-400/70 font-light mt-1.5"
+                            initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            {errors.email}
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </div>
 
             <div className="relative">
@@ -157,23 +203,48 @@ function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | '
                 <textarea
                     placeholder="Your message"
                     value={message}
+                    maxLength={400}
                     onChange={(e) => setMessage(e.target.value)}
                     onFocus={() => setFocusedField('message')}
-                    onBlur={() => setFocusedField(null)}
-                    className={`${inputClasses('message')} resize-none h-32`}
+                    onBlur={() => { setFocusedField(null); setTouched(t => ({ ...t, message: true })) }}
+                    className={`${inputClasses('message')} resize-none h-32 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-white/40`}
                     disabled={status === 'submitting'}
                 />
+                <div className="flex justify-between items-center mt-1.5">
+                    <AnimatePresence>
+                        {errors.message && (
+                            <motion.p
+                                className="text-xs text-red-400/70 font-light"
+                                initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {errors.message}
+                            </motion.p>
+                        )}
+                    </AnimatePresence>
+                    <motion.span
+                        className="text-xs font-light tabular-nums ml-auto"
+                        animate={{
+                            opacity: focusedField === 'message' || message.length > 0 ? 1 : 0,
+                            color: message.length > 360 ? 'rgba(248,113,113,0.8)' : 'rgba(255,255,255,0.25)',
+                        }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {message.length}/400
+                    </motion.span>
+                </div>
             </div>
 
             {/* Submit + status */}
             <div className="flex items-center gap-6 pt-2">
                 <MagneticButton
+                    disabled={status === 'submitting' || !isValid}
                     onMouseEnter={() => setCursorVariant('link')}
                     onMouseLeave={() => setCursorVariant('default')}
                 >
                     <button
                         type="submit"
-                        disabled={status === 'submitting' || !name.trim() || !email.trim() || !message.trim()}
+                        disabled={status === 'submitting' || !isValid}
                         className="group inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:border-white/30 disabled:hover:text-white/70"
                     >
                         {status === 'submitting' ? (
@@ -226,7 +297,7 @@ function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | '
 }
 
 export default function Contact() {
-    const [navModalOpen, setNavModalOpen] = useState(false)
+    const { setNavModalOpen } = usePageTransition()
     const { setCursorVariant } = useCursor()
 
     const heroRef = useRef(null)
@@ -239,16 +310,6 @@ export default function Contact() {
 
     return (
         <main className="relative min-h-screen font-sans cursor-none">
-            <NavSidebar
-                navModalOpen={navModalOpen}
-                setNavModalOpen={setNavModalOpen}
-                links={[
-                    { label: 'HOME', href: '/' },
-                    { label: 'WORK', href: '/work' },
-                    { label: 'ABOUT', href: '/about' },
-                ]}
-            />
-
             {/* ═══ HERO ═══ */}
             <section
                 ref={heroRef}
@@ -256,16 +317,8 @@ export default function Contact() {
                 onClick={() => setNavModalOpen(false)}
             >
                 {/* Top nav */}
-                <nav className="absolute top-0 left-0 right-0 flex items-center px-6 sm:px-12 lg:px-24 py-6 text-lg font-thin tracking-widest text-white/60">
-                    <TransitionLink
-                        href="/"
-                        className="cursor-none hover:text-white transition-colors duration-200"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('default')}
-                    >
-                        ← BACK
-                    </TransitionLink>
-                    <span className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.2em] text-white/35 uppercase">
+                <nav className="absolute top-0 left-0 right-0 flex items-center justify-center px-6 sm:px-12 lg:px-24 py-6 text-lg font-thin tracking-widest text-white/60">
+                    <span className="text-sm tracking-[0.2em] text-white/35 uppercase">
                         Contact
                     </span>
                 </nav>

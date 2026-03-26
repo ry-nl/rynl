@@ -24,8 +24,27 @@ export async function POST(request: Request) {
             )
         }
 
+        const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!EMAIL_RE.test(email)) {
+            return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 })
+        }
+
+        if (name.length > 50 || email.length > 50 || message.length > 400) {
+            return NextResponse.json(
+                { error: 'Input exceeds maximum allowed length.' },
+                { status: 400 }
+            )
+        }
+
+        if (message.trim().length < 30) {
+            return NextResponse.json(
+                { error: 'Message must be at least 30 characters.' },
+                { status: 400 }
+            )
+        }
+
         await resend.emails.send({
-            from: 'Contact Form <onboarding@resend.dev>',
+            from: 'Contact Form <noreply@contact.rynl.dev>',
             to: 'rynldev@gmail.com',
             subject: `New inquiry from ${name}`,
             replyTo: email,

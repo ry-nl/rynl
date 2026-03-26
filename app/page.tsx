@@ -5,8 +5,8 @@ import Image from 'next/image'
 
 import ParallaxText from './components/ParallaxText'
 import { useCursor } from './components/Cursor'
-import NavSidebar from './components/NavSidebar'
 import { MagneticButton } from './components/MagneticButton'
+import { usePageTransition } from './components/PageTransition'
 
 import PhotoWebsite from '@/public/photoWebsite.jpg'
 import TeaWebsite from '@/public/teaWebsite.jpg'
@@ -119,7 +119,7 @@ export default function Landing() {
     const heroRef = useRef(null)
     const heroInView = useInView(heroRef)
 
-    const [navModalOpen, setNavModalOpen] = useState(false)
+    const { setNavModalOpen } = usePageTransition()
 
     // recent work hover effect
     const [workLinkHovered, setWorkLinkHovered] = useState(-1)
@@ -145,20 +145,9 @@ export default function Landing() {
         once: true,
     })
 
-    const navLinks = [
-        { label: 'WORK', href: '/work' },
-        { label: 'ABOUT', href: '/about' },
-        { label: 'CONTACT', href: '/contact' },
-    ]
-
     // RENDER
     return (
         <motion.div ref={ref} className="bg-light font-sans cursor-none">
-            <NavSidebar
-                navModalOpen={navModalOpen}
-                setNavModalOpen={setNavModalOpen}
-                links={navLinks}
-            />
             <div className="z-10" onClick={() => setNavModalOpen(false)}>
                 <section
                     ref={heroRef}

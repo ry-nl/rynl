@@ -1,12 +1,11 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useRef, useCallback } from 'react'
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import Image from 'next/image'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
-import NavSidebar from '../components/NavSidebar'
-import { TransitionLink } from '../components/PageTransition'
+import { TransitionLink, usePageTransition } from '../components/PageTransition'
 import { MagneticButton } from '../components/MagneticButton'
 
 
@@ -55,7 +54,7 @@ const timeline = [
 ]
 
 export default function About() {
-    const [navModalOpen, setNavModalOpen] = useState(false)
+    const { setNavModalOpen } = usePageTransition()
     const { setCursorVariant } = useCursor()
 
     const heroRef = useRef(null)
@@ -105,16 +104,6 @@ export default function About() {
 
     return (
         <main className="relative min-h-screen font-sans cursor-none">
-            <NavSidebar
-                navModalOpen={navModalOpen}
-                setNavModalOpen={setNavModalOpen}
-                links={[
-                    { label: 'HOME', href: '/' },
-                    { label: 'WORK', href: '/work' },
-                    { label: 'CONTACT', href: '/contact' },
-                ]}
-            />
-
             {/* ═══ HERO ═══ */}
             <section
                 ref={heroRef}
@@ -122,16 +111,8 @@ export default function About() {
                 onClick={() => setNavModalOpen(false)}
             >
                 {/* Top nav */}
-                <nav className="relative flex items-center px-6 sm:px-12 lg:px-24 py-6 text-lg font-thin tracking-widest text-black/60">
-                    <TransitionLink
-                        href="/"
-                        className="cursor-none"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('default')}
-                    >
-                        ← BACK
-                    </TransitionLink>
-                    <span className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.2em] text-black/45 uppercase">
+                <nav className="relative flex items-center justify-center px-6 sm:px-12 lg:px-24 py-6 text-lg font-thin tracking-widest text-black/60">
+                    <span className="text-sm tracking-[0.2em] text-black/45 uppercase">
                         About
                     </span>
                 </nav>

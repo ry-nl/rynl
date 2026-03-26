@@ -5,8 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
 import { MagneticButton } from '../components/MagneticButton'
-import NavSidebar from '../components/NavSidebar'
-import { TransitionLink } from '../components/PageTransition'
+import { usePageTransition } from '../components/PageTransition'
 
 import {
     ExperienceData,
@@ -23,7 +22,7 @@ export default function Work() {
         }
     }, [])
 
-    const [navModalOpen, setNavModalOpen] = useState(false)
+    const { setNavModalOpen } = usePageTransition()
     const { setCursorVariant } = useCursor()
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
 
@@ -52,16 +51,6 @@ export default function Work() {
                 />
             </video>
 
-            <NavSidebar
-                navModalOpen={navModalOpen}
-                setNavModalOpen={setNavModalOpen}
-                links={[
-                    { label: 'HOME', href: '/' },
-                    { label: 'ABOUT', href: '/about' },
-                    { label: 'CONTACT', href: '/contact' },
-                ]}
-            />
-
             {/* ═══ HERO ═══ */}
             <motion.section
                 ref={heroRef}
@@ -69,16 +58,8 @@ export default function Work() {
                 style={{ opacity: heroOpacity, y: heroY }}
                 onClick={() => setNavModalOpen(false)}
             >
-                <nav className="relative flex items-center py-6 text-lg font-thin tracking-widest text-white/70">
-                    <TransitionLink
-                        href="/"
-                        className="cursor-none hover:text-white transition-colors duration-200"
-                        onMouseEnter={() => setCursorVariant('link')}
-                        onMouseLeave={() => setCursorVariant('default')}
-                    >
-                        ← BACK
-                    </TransitionLink>
-                    <span className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.2em] text-white/40 uppercase">
+                <nav className="relative flex items-center justify-center py-6 text-lg font-thin tracking-widest text-white/70">
+                    <span className="text-sm tracking-[0.2em] text-white/40 uppercase">
                         Work
                     </span>
                 </nav>

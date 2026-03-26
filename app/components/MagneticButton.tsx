@@ -6,6 +6,7 @@ interface MagneticButtonProps {
     children: React.ReactNode
     className?: string
     strength?: number
+    disabled?: boolean
     onMouseEnter?: () => void
     onMouseLeave?: () => void
 }
@@ -14,6 +15,7 @@ export function MagneticButton({
     children,
     className,
     strength = 0.28,
+    disabled = false,
     onMouseEnter,
     onMouseLeave,
 }: MagneticButtonProps) {
@@ -26,14 +28,14 @@ export function MagneticButton({
 
     const handleMouseMove = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
-            if (!ref.current) return
+            if (disabled || !ref.current) return
             const rect = ref.current.getBoundingClientRect()
             const centerX = rect.left + rect.width / 2
             const centerY = rect.top + rect.height / 2
             x.set((e.clientX - centerX) * strength)
             y.set((e.clientY - centerY) * strength)
         },
-        [x, y, strength]
+        [x, y, strength, disabled]
     )
 
     const handleMouseLeave = useCallback(() => {
@@ -43,8 +45,9 @@ export function MagneticButton({
     }, [x, y, onMouseLeave])
 
     const handleMouseEnter = useCallback(() => {
+        if (disabled) return
         onMouseEnter?.()
-    }, [onMouseEnter])
+    }, [onMouseEnter, disabled])
 
     return (
         <motion.div
