@@ -80,23 +80,66 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
             if (phase !== 'idle') return
             setNavModalOpen(false)
 
+            const clone = cloneRef.current
+            const wrapper = wrapperRef.current
+            if (!clone || !wrapper) return
+
             const currentIndex = getPageIndex(pathname)
             const targetIndex = getPageIndex(href)
-            directionRef.current = targetIndex > currentIndex ? 'right' : 'left'
+            const dir = targetIndex > currentIndex ? 'right' : 'left'
+            directionRef.current = dir
 
-            // Snapshot the current page into the clone
-            if (wrapperRef.current && cloneRef.current) {
-                const scrollY = window.scrollY
-                cloneRef.current.innerHTML =
-                    `<div style="transform:translateY(-${scrollY}px);pointer-events:none">${wrapperRef.current.innerHTML}</div>`
-            }
+            const vw = window.innerWidth
+            const scrollY = window.scrollY
+            const wrapperStartX = dir === 'right' ? vw : -vw
 
-            // Navigate immediately
+            // 1. Snapshot current page into clone
+            clone.innerHTML =
+                `<div style="transform:translateY(-${scrollY}px);pointer-events:none">${wrapper.innerHTML}</div>`
+
+            // Replace cloned videos with a frozen frame to prevent reload flash
+            const origVideos = wrapper.querySelectorAll('video')
+            const clonedVideos = clone.querySelectorAll('video')
+            clonedVideos.forEach((clonedVideo, i) => {
+                const origVideo = origVideos[i]
+                if (origVideo && origVideo.readyState >= 2) {
+                    // Capture current frame as canvas → image
+                    try {
+                        const canvas = document.createElement('canvas')
+                        canvas.width = origVideo.videoWidth
+                        canvas.height = origVideo.videoHeight
+                        const ctx = canvas.getContext('2d')
+                        if (ctx) {
+                            ctx.drawImage(origVideo, 0, 0)
+                            const img = document.createElement('img')
+                            img.src = canvas.toDataURL('image/jpeg', 0.8)
+                            img.className = clonedVideo.className
+                            img.style.cssText = clonedVideo.style.cssText
+                            clonedVideo.replaceWith(img)
+                            return
+                        }
+                    } catch { /* fall through to removal */ }
+                }
+                // Fallback: just remove the video so it doesn't try to load
+                clonedVideo.remove()
+            })
+
+            // 2. Show clone covering viewport + hide body bg + position wrapper off-screen
+            //    All synchronous — happens before React re-renders with new route content
+            document.documentElement.style.overflowX = 'hidden'
+            document.body.style.background = '#2A2A2A'
+            clone.style.transition = 'none'
+            clone.style.display = 'block'
+            clone.style.transform = 'translateX(0px)'
+            wrapper.style.transition = 'none'
+            wrapper.style.transform = `translateX(${wrapperStartX}px)`
+            wrapper.style.backgroundColor = '#2A2A2A'
+
+            // 3. Navigate — new content renders off-screen in the wrapper
             router.push(href)
             window.scrollTo({ top: 0, behavior: 'instant' })
 
-            // Move to the 'cloned' phase — the effect below will position elements
-            // and then kick off the CSS transition in a rAF
+            // 4. Kick off the slide after new content has had time to render
             setPhase('cloned')
         },
         [phase, pathname, router]
@@ -106,7 +149,8 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }, [])
 
-    // Phase: 'cloned' → position elements off-screen, then trigger CSS transitions
+    // Phase: 'cloned' → elements are already positioned, just start the CSS transition
+    // after giving the new page content enough time to render off-screen
     useEffect(() => {
         if (phase !== 'cloned') return
 
@@ -116,29 +160,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
 
         const vw = window.innerWidth
         const dir = directionRef.current
-
-        // Prevent horizontal scroll and hide body's light background
-        document.documentElement.style.overflowX = 'hidden'
-        document.body.style.background = '#2A2A2A'
-
         const cloneExitX = dir === 'right' ? -vw : vw
-        const wrapperStartX = dir === 'right' ? vw : -vw
 
-        // Position elements instantly (no transition yet)
-        clone.style.transition = 'none'
-        wrapper.style.transition = 'none'
-        clone.style.display = 'block'
-        clone.style.transform = 'translateX(0px)'
-        wrapper.style.transform = `translateX(${wrapperStartX}px)`
-        // Give wrapper a solid background so un-rendered content doesn't flash white
-        wrapper.style.backgroundColor = '#2A2A2A'
-
-        // Force reflow so the browser registers the starting positions
-        void wrapper.offsetHeight
-        void clone.offsetHeight
-
-        // Apply CSS transitions and set end positions after a micro-delay
-        // (setTimeout instead of rAF to ensure it fires even if tab is not visible)
+        // Wait for new page content to mount and paint before sliding
         const startTimer = setTimeout(() => {
             const ease = 'cubic-bezier(0.4, 0, 0.2, 1)'
             clone.style.transition = `transform ${SWIPE_DURATION}ms ${ease}`
@@ -146,11 +170,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
             clone.style.transform = `translateX(${cloneExitX}px)`
             wrapper.style.transform = 'translateX(0px)'
 
-            // Clean up after the transition finishes
             timerRef.current = setTimeout(finishTransition, SWIPE_DURATION + 50)
-        }, 20)
+        }, 80)
 
-        // If this effect re-runs (strict mode), clean up
         return () => {
             clearTimeout(startTimer)
             if (timerRef.current) {
