@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { useCursor } from '../components/Cursor'
@@ -43,6 +43,187 @@ const contactLinks = [
         href: 'https://github.com/ry-nl',
     },
 ]
+
+type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+function ContactForm({ setCursorVariant }: { setCursorVariant: (v: 'default' | 'link') => void }) {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [message, setMessage] = useState('')
+    const [status, setStatus] = useState<FormStatus>('idle')
+    const [errorMsg, setErrorMsg] = useState('')
+    const [focusedField, setFocusedField] = useState<string | null>(null)
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!name.trim() || !email.trim() || !message.trim()) return
+
+        setStatus('submitting')
+        setErrorMsg('')
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name.trim(), email: email.trim(), message: message.trim() }),
+            })
+            const data = await res.json()
+
+            if (res.ok) {
+                setStatus('success')
+                setName('')
+                setEmail('')
+                setMessage('')
+                setTimeout(() => setStatus('idle'), 5000)
+            } else {
+                setStatus('error')
+                setErrorMsg(data.error || 'Something went wrong.')
+                setTimeout(() => setStatus('idle'), 4000)
+            }
+        } catch {
+            setStatus('error')
+            setErrorMsg('Network error. Please try again.')
+            setTimeout(() => setStatus('idle'), 4000)
+        }
+    }
+
+    const inputClasses = (field: string) =>
+        `w-full bg-transparent border-b ${
+            focusedField === field ? 'border-white/60' : 'border-white/15'
+        } py-3 text-white font-light text-base sm:text-lg outline-none transition-all duration-500 placeholder:text-white/25 focus:placeholder:text-white/40 cursor-none`
+
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            <div className="relative">
+                <motion.label
+                    className="absolute left-0 text-xs tracking-[0.2em] uppercase pointer-events-none"
+                    animate={{
+                        y: focusedField === 'name' || name ? -22 : 0,
+                        opacity: focusedField === 'name' || name ? 0.6 : 0,
+                        scale: focusedField === 'name' || name ? 0.9 : 1,
+                    }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                >
+                    Name
+                </motion.label>
+                <input
+                    type="text"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onFocus={() => setFocusedField('name')}
+                    onBlur={() => setFocusedField(null)}
+                    className={inputClasses('name')}
+                    disabled={status === 'submitting'}
+                />
+            </div>
+
+            <div className="relative">
+                <motion.label
+                    className="absolute left-0 text-xs tracking-[0.2em] uppercase pointer-events-none"
+                    animate={{
+                        y: focusedField === 'email' || email ? -22 : 0,
+                        opacity: focusedField === 'email' || email ? 0.6 : 0,
+                        scale: focusedField === 'email' || email ? 0.9 : 1,
+                    }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                >
+                    Email
+                </motion.label>
+                <input
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField(null)}
+                    className={inputClasses('email')}
+                    disabled={status === 'submitting'}
+                />
+            </div>
+
+            <div className="relative">
+                <motion.label
+                    className="absolute left-0 text-xs tracking-[0.2em] uppercase pointer-events-none"
+                    animate={{
+                        y: focusedField === 'message' || message ? -22 : 0,
+                        opacity: focusedField === 'message' || message ? 0.6 : 0,
+                        scale: focusedField === 'message' || message ? 0.9 : 1,
+                    }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                >
+                    Message
+                </motion.label>
+                <textarea
+                    placeholder="Your message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onFocus={() => setFocusedField('message')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`${inputClasses('message')} resize-none h-32`}
+                    disabled={status === 'submitting'}
+                />
+            </div>
+
+            {/* Submit + status */}
+            <div className="flex items-center gap-6 pt-2">
+                <MagneticButton
+                    onMouseEnter={() => setCursorVariant('link')}
+                    onMouseLeave={() => setCursorVariant('default')}
+                >
+                    <button
+                        type="submit"
+                        disabled={status === 'submitting' || !name.trim() || !email.trim() || !message.trim()}
+                        className="group inline-flex items-center gap-3 px-8 py-3 border border-white/30 rounded-full text-sm tracking-widest uppercase font-light text-white/70 hover:text-white hover:border-white/60 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/30 transition-all duration-300 cursor-none disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:hover:border-white/30 disabled:hover:text-white/70"
+                    >
+                        {status === 'submitting' ? (
+                            <>
+                                Sending
+                                <motion.span
+                                    className="inline-block w-4 h-4 border-2 border-white/30 border-t-white/80 rounded-full"
+                                    animate={{ rotate: 360 }}
+                                    transition={{ repeat: Infinity, duration: 0.8, ease: 'linear' }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                Send Message
+                                <span className="inline-block transition-transform duration-300 ease-out group-hover:-rotate-45">→</span>
+                            </>
+                        )}
+                    </button>
+                </MagneticButton>
+
+                <AnimatePresence mode="wait">
+                    {status === 'success' && (
+                        <motion.span
+                            key="success"
+                            className="text-sm tracking-wide text-green-400/80 font-light"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            Message sent successfully.
+                        </motion.span>
+                    )}
+                    {status === 'error' && (
+                        <motion.span
+                            key="error"
+                            className="text-sm tracking-wide text-red-400/80 font-light"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            {errorMsg}
+                        </motion.span>
+                    )}
+                </AnimatePresence>
+            </div>
+        </form>
+    )
+}
 
 export default function Contact() {
     const [navModalOpen, setNavModalOpen] = useState(false)
@@ -89,36 +270,55 @@ export default function Contact() {
                     </span>
                 </nav>
 
-                <div className="max-w-[1000px]">
-                    <motion.p
-                        className="text-sm tracking-[0.25em] uppercase text-white/45 mb-8"
+                <div className="flex flex-col lg:flex-row items-start lg:items-center gap-16 lg:gap-24 max-w-[1400px] w-full mx-auto py-32 sm:py-0">
+                    {/* Left: headline */}
+                    <div className="lg:flex-1 max-w-[600px]">
+                        <motion.p
+                            className="text-sm tracking-[0.25em] uppercase text-white/45 mb-8"
+                            variants={fadeUp}
+                            initial="hidden"
+                            animate="visible"
+                            custom={0.2}
+                        >
+                            Get in Touch
+                        </motion.p>
+                        <motion.h1
+                            className="text-3xl sm:text-4xl lg:text-[4.5rem] font-light leading-[1.1] tracking-tight mb-8"
+                            variants={fadeUp}
+                            initial="hidden"
+                            animate="visible"
+                            custom={0.4}
+                        >
+                            Let&apos;s build something great together.
+                        </motion.h1>
+                        <motion.p
+                            className="text-base sm:text-lg lg:text-xl font-light leading-relaxed text-white/60"
+                            variants={fadeUp}
+                            initial="hidden"
+                            animate="visible"
+                            custom={0.6}
+                        >
+                            I&apos;m always open to discussing new opportunities,
+                            collaborations, or just connecting over shared interests
+                            in technology and design.
+                        </motion.p>
+                    </div>
+
+                    {/* Right: contact form */}
+                    <motion.div
+                        className="w-full lg:flex-1 max-w-[520px]"
                         variants={fadeUp}
                         initial="hidden"
                         animate="visible"
-                        custom={0.2}
+                        custom={0.7}
                     >
-                        Get in Touch
-                    </motion.p>
-                    <motion.h1
-                        className="text-3xl sm:text-4xl lg:text-[4.5rem] font-light leading-[1.1] tracking-tight mb-8"
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="visible"
-                        custom={0.4}
-                    >
-                        Let&apos;s build something great together.
-                    </motion.h1>
-                    <motion.p
-                        className="text-base sm:text-lg lg:text-xl font-light leading-relaxed text-white/60 max-w-[600px]"
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="visible"
-                        custom={0.6}
-                    >
-                        I&apos;m always open to discussing new opportunities,
-                        collaborations, or just connecting over shared interests
-                        in technology and design.
-                    </motion.p>
+                        <div className="border border-white/10 rounded-2xl p-8 sm:p-10 backdrop-blur-sm bg-white/[0.02]">
+                            <p className="text-sm tracking-[0.2em] uppercase text-white/40 mb-10">
+                                Send an inquiry
+                            </p>
+                            <ContactForm setCursorVariant={setCursorVariant} />
+                        </div>
+                    </motion.div>
                 </div>
 
                 {/* Scroll indicator */}
