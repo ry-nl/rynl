@@ -25,6 +25,7 @@ export function useCursor() {
 
 export function CursorProvider({ children }: { children: ReactNode }) {
     const [variant, setVariant] = useState<CursorVariant>('default')
+    const [isPointerDevice, setIsPointerDevice] = useState(false)
     const mouseX = useMotionValue(-100)
     const mouseY = useMotionValue(-100)
     const [visible, setVisible] = useState(false)
@@ -40,6 +41,15 @@ export function CursorProvider({ children }: { children: ReactNode }) {
     )
 
     useEffect(() => {
+        const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+        setIsPointerDevice(mq.matches)
+        const onChange = (e: MediaQueryListEvent) => setIsPointerDevice(e.matches)
+        mq.addEventListener('change', onChange)
+        return () => mq.removeEventListener('change', onChange)
+    }, [])
+
+    useEffect(() => {
+        if (!isPointerDevice) return
         const onMouseMove = (e: MouseEvent) => {
             mouseX.set(e.clientX)
             mouseY.set(e.clientY)
@@ -47,49 +57,53 @@ export function CursorProvider({ children }: { children: ReactNode }) {
         }
         window.addEventListener('mousemove', onMouseMove)
         return () => window.removeEventListener('mousemove', onMouseMove)
-    }, [mouseX, mouseY, visible])
+    }, [mouseX, mouseY, visible, isPointerDevice])
 
     const isLink = variant === 'link'
 
     return (
         <CursorContext.Provider value={contextValue}>
             {children}
-            {/* Main cursor — instant, blend mode for auto contrast */}
-            <motion.div
-                className="fixed rounded-full pointer-events-none z-[999]"
-                style={{
-                    left: mouseX,
-                    top: mouseY,
-                    x: '-50%',
-                    y: '-50%',
-                    mixBlendMode: isLink ? 'normal' : 'difference',
-                    opacity: visible ? 0.82 : 0,
-                }}
-                animate={{
-                    width: isLink ? 32 : 20,
-                    height: isLink ? 32 : 20,
-                    backgroundColor: isLink ? '#2d86fa' : '#ffffff',
-                }}
-                transition={{ type: 'tween', duration: 0.15 }}
-            />
-            {/* Trailing cursor — springs behind, decorative */}
-            <motion.div
-                className="fixed rounded-full pointer-events-none z-[999]"
-                style={{
-                    left: trailX,
-                    top: trailY,
-                    x: '-50%',
-                    y: '-50%',
-                    mixBlendMode: isLink ? 'normal' : 'difference',
-                    opacity: visible ? 0.65 : 0,
-                }}
-                animate={{
-                    width: isLink ? 20 : 12,
-                    height: isLink ? 20 : 12,
-                    backgroundColor: isLink ? '#2d86fa' : '#ffffff',
-                }}
-                transition={{ type: 'tween', duration: 0.15 }}
-            />
+            {isPointerDevice && (
+                <>
+                    {/* Main cursor — instant, blend mode for auto contrast */}
+                    <motion.div
+                        className="fixed rounded-full pointer-events-none z-[999]"
+                        style={{
+                            left: mouseX,
+                            top: mouseY,
+                            x: '-50%',
+                            y: '-50%',
+                            mixBlendMode: isLink ? 'normal' : 'difference',
+                            opacity: visible ? 0.82 : 0,
+                        }}
+                        animate={{
+                            width: isLink ? 32 : 20,
+                            height: isLink ? 32 : 20,
+                            backgroundColor: isLink ? '#2d86fa' : '#ffffff',
+                        }}
+                        transition={{ type: 'tween', duration: 0.15 }}
+                    />
+                    {/* Trailing cursor — springs behind, decorative */}
+                    <motion.div
+                        className="fixed rounded-full pointer-events-none z-[999]"
+                        style={{
+                            left: trailX,
+                            top: trailY,
+                            x: '-50%',
+                            y: '-50%',
+                            mixBlendMode: isLink ? 'normal' : 'difference',
+                            opacity: visible ? 0.65 : 0,
+                        }}
+                        animate={{
+                            width: isLink ? 20 : 12,
+                            height: isLink ? 20 : 12,
+                            backgroundColor: isLink ? '#2d86fa' : '#ffffff',
+                        }}
+                        transition={{ type: 'tween', duration: 0.15 }}
+                    />
+                </>
+            )}
         </CursorContext.Provider>
     )
 }

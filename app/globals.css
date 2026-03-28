@@ -13,9 +13,22 @@
 }
 
 * {
-    cursor: none;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Only hide the native cursor on devices with a real pointer (not touch) */
+@media (hover: hover) and (pointer: fine) {
+    * {
+        cursor: none;
+    }
+}
+
+/* Restore normal cursor on touch / mobile devices */
+@media (hover: none), (pointer: coarse) {
+    *, .cursor-none {
+        cursor: auto !important;
+    }
 }
 
 *::-webkit-scrollbar {
