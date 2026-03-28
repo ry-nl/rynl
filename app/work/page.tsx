@@ -19,6 +19,10 @@ export default function Work() {
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.playbackRate = 0.4
+            // React doesn't reliably set the muted attribute on <video> DOM elements,
+            // which causes mobile browsers to block autoplay. Set it explicitly.
+            videoRef.current.muted = true
+            videoRef.current.play().catch(() => {})
         }
     }, [])
 
